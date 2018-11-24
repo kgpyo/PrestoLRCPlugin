@@ -1,0 +1,27 @@
+﻿<Window
+    x:Class="Presto.SWCamp.Lyrics.LyricsWindow"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:ps="clr-namespace:Presto.SDK;assembly=Presto.SDK"
+    Title="플레이어 가사 창"
+    Width="600"
+    Height="400"
+    DataContext="{x:Static ps:PrestoSDK.PrestoService}"
+    mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" Opacity="0.8" Background="#FFFFF0F0">
+
+    <StackPanel VerticalAlignment="Center">
+        <TextBlock
+            FontSize="14"
+            Text="{Binding Player.CurrentMusic.Title}"
+            TextAlignment="Center" />
+
+        <TextBlock
+            TextWrapping="Wrap"
+            x:Name="textLyrics"
+            FontSize="24"
+            Text="가사가 여기에 표시됩니다."
+            TextAlignment="Center" />
+    </StackPanel>
+</Window>
