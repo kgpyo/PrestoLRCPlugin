@@ -19,21 +19,28 @@ namespace Presto.SWCamp.Lyrics
         private const string byPattern = @"^\[by:.*\]$";
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
         private Lyrics lyrics;
+        public string CurrentMusic { get; set; } = null;
                 
         public void StreamChanged()
         {
             lyrics = new Lyrics();
             try
             {
-                string currentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
-                string lyricsFileName = Path.GetFileNameWithoutExtension(currentMusic) + ".lrc";
-                string parentPath = Path.GetDirectoryName(currentMusic);
+                CurrentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
+                string lyricsFileName = Path.GetFileNameWithoutExtension(CurrentMusic) + ".lrc";
+                string parentPath = Path.GetDirectoryName(CurrentMusic);
                 string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName));
                 this.LyricsParsing(lines);
             }
             catch
             {
-                lyrics.Lines.Add(new KeyValuePair<double, string>(0,"가사를 불러올 수 없습니다."));
+                string artist = PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name;
+                string album = PrestoSDK.PrestoService.Player.CurrentMusic.Album.Name;
+                string bitrate = PrestoSDK.PrestoService.Player.CurrentMusic.Bitrate.ToString();
+                if (artist == null) artist = "알수없는 음악가";
+                if (album == null) album = "알 수 없는 앨범";
+                lyrics.Lines.Add(new KeyValuePair<double, string>(0,artist + "/" + album + "/" + bitrate + "kbps"
+                    + "\n가사를 불러올 수 없습니다."));
             }
         }
 
@@ -116,7 +123,7 @@ namespace Presto.SWCamp.Lyrics
 
         public string GetCurrentLyric(double position)
         {
-            string preparing = "가사 표시 창";
+            string preparing = "가사 준비중입니다.";
             if (lyrics == null || lyrics.Lines.Count <= 0 || position < 0)
                 return preparing;
             int lyricsLength = lyrics.Lines.Count;
@@ -138,10 +145,9 @@ namespace Presto.SWCamp.Lyrics
             //근접한 위치를 찾을 수 없을경우 가사파일 정보를 출력
             if (closeLyrics == -1)
             {
-                string infoData = "Album: " + lyrics.Album + "\n" +
-                    "Title: " + lyrics.Title + "\n" +
-                    "Author: " + lyrics.Author + "\n" +
-                    "By: " + lyrics.By;
+                string infoData = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
+                    "작사가: " + lyrics.Author + "\n" +
+                    "가사 만든이: " + lyrics.By;
                 return infoData;
             }
 

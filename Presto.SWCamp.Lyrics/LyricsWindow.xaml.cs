@@ -31,7 +31,7 @@ namespace Presto.SWCamp.Lyrics
 
             var timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(100)
+                Interval = TimeSpan.FromMilliseconds(300)
             };
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -40,49 +40,69 @@ namespace Presto.SWCamp.Lyrics
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
             lyricsManager.StreamChanged();
+            if (PrestoSDK.PrestoService.Player.CurrentMusic.Title == null)
+            {
+                string fileName = Path.GetFileNameWithoutExtension(lyricsManager.CurrentMusic);
+                PrestoSDK.PrestoService.Player.CurrentMusic.Title = fileName;
+            }
         }
         
         private void Timer_Tick(object sender, EventArgs e)
         {
-            double cur = Presto.SDK.PrestoSDK.PrestoService.Player.Position;
+            double cur = PrestoSDK.PrestoService.Player.Position;
             textLyrics.Text = lyricsManager.GetCurrentLyric(cur);
-            /*
-            //lyrics.BinarySearch(cur, IComparer<KeyValuePair<double, string>>());
-            //이분탐색
-            int left = 0, right = lyrics.Count - 1, mid = 0, ans = 0;
-            while(left<=right)
+        }
+
+        /* 창 드래그 */
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton != MouseButtonState.Pressed) DragMove();
+        }
+
+        /* 앨범아트 버튼 관리 */
+        private void PrevButton_Click(object sender, RoutedEventArgs e)
+        {
+            PrestoSDK.PrestoService.Player.PlayPrevious();
+        }
+
+        private void PlayOrPauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(PrestoSDK.PrestoService.Player.PlaybackState == Common.PlaybackState.Playing)
             {
-                mid = (left + right) / 2;
-                if(lyrics[mid].Key <= cur)
-                {
-                    ans = mid;
-                    left = mid + 1;
-                } else
-                {
-                    right = mid - 1;
-                }
+                playStatus.Content = "||";
+                PrestoSDK.PrestoService.Player.Pause();
             }
-            textLyrics.Text = lyrics[ans].Value;
-            */
-            /*
-            for (int i=0;i<lyrics.Count;i+=1)
+            else
             {
-                double time = lyrics[i].Key;
-                string text = lyrics[i].Value;
-                if(i+1<lyrics.Count)
-                {
-                    if (time <= cur && cur < lyrics[i + 1].Key)
-                    {
-                        textLyrics.Text = text;
-                        break;
-                    }
-                }
-                else
-                {
-                    textLyrics.Text = text;
-                }
+                playStatus.Content = "";
+                PrestoSDK.PrestoService.Player.Play();
             }
-            */
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            PrestoSDK.PrestoService.Player.PlayNext();
+        }
+
+        /* 우상단 버튼 관리 */
+        private void CloseButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Close();
+        }
+
+        private void TopMostButton_Click(object sender, RoutedEventArgs e)
+        {
+            //항상 위에 표시 활성화
+            if (this.Topmost == false)
+            {
+                topMostButton.Color = (Color)ColorConverter.ConvertFromString("#000000");
+                this.Topmost = true;
+            }
+            else
+            {
+                topMostButton.Color = (Color)ColorConverter.ConvertFromString("#FF74C105");
+                this.Topmost = false;
+            }
         }
     }
 }

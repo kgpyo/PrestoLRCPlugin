@@ -91,6 +91,9 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
   </ItemGroup>
+  <ItemGroup>
+    <Resource Include="noAlbumArt.JPG" />
+  </ItemGroup>
   <PropertyGroup>
     <StartAction>Program</StartAction>
     <StartProgram>$(Presto)\Presto.exe</StartProgram>

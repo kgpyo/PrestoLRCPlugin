@@ -6,22 +6,67 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ps="clr-namespace:Presto.SDK;assembly=Presto.SDK"
     Title="플레이어 가사 창"
-    Width="600"
-    Height="400"
+    Width="400"
+    Height="120"
     DataContext="{x:Static ps:PrestoSDK.PrestoService}"
-    mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" Opacity="0.8" Background="#FFFFF0F0">
+    Margin="5"
+    Background="{x:Null}" WindowStyle="None" AllowsTransparency="True"
+    MouseLeftButtonDown="Window_MouseDown">
+    <Border BorderBrush="Gray" BorderThickness="0" Background="White" Margin="5" Opacity="0.8">
+        <Border.Effect>
+            <DropShadowEffect ShadowDepth="0" BlurRadius="10" Color="Gray" />
+        </Border.Effect>
+        <Grid>
+            <Grid>
+                <StackPanel Width="100" Height="100" HorizontalAlignment="Left" Margin="3">
+                    <StackPanel.Background>
+                        <ImageBrush ImageSource="noAlbumArt.JPG"/>
+                    </StackPanel.Background>
+                    <Image 
+                        Source="{Binding Player.CurrentMusic.Album.Picture}" 
+                        HorizontalAlignment="Left" 
+                        VerticalAlignment="Top" />
+                </StackPanel>
+                <Label x:Name="playStatus" Content="" HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Width="100" Height="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" FontWeight="Bold"/>
+                <Button HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Width="30" Height="100" Click="PrevButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="White" Opacity="0" ToolTip="이전곡"/>
+                <Button HorizontalAlignment="Left" Margin="33,5,0,0" VerticalAlignment="Top" Width="40" Height="100" Click="PlayOrPauseButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="White" Opacity="0" ToolTip="재생/일시정지"/>
+                <Button HorizontalAlignment="Left" Margin="73,5,0,0" VerticalAlignment="Top" Width="30" Height="100" Click="NextButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="White" Opacity="0" ToolTip="다음곡"/>
+            </Grid>
+            <StackPanel Margin="3" Height="100" Width="285" HorizontalAlignment="Right">
 
-    <StackPanel VerticalAlignment="Center">
-        <TextBlock
-            FontSize="14"
-            Text="{Binding Player.CurrentMusic.Title}"
-            TextAlignment="Center" />
-
-        <TextBlock
-            TextWrapping="Wrap"
-            x:Name="textLyrics"
-            FontSize="24"
-            Text="가사가 여기에 표시됩니다."
-            TextAlignment="Center" />
-    </StackPanel>
+                <TextBlock
+                    x:Name="songTitle"
+                    FontSize="14"
+                    Text="{Binding Player.CurrentMusic.Title}"
+                    TextAlignment="Center" FontWeight="Bold" Height="20" />
+                <TextBlock
+                    TextWrapping="Wrap"
+                    x:Name="textLyrics"
+                    FontSize="12"
+                    Text="가사가 여기에 표시됩니다."
+                    TextAlignment="Center"/>
+            </StackPanel>
+            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Margin="1" Background="White" BorderBrush="{x:Null}" Click="CloseButton_Click" ToolTip="닫기">
+                <Ellipse Height="10"  Width="10">
+                    <Ellipse.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop Color="Red" Offset="0"/>
+                            <GradientStop Color="#FFFFB5B5" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+            </Button>
+            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,1,15,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="TopMostButton_Click" ToolTip="항상 위">
+                <Ellipse Height="10" Width="10">
+                    <Ellipse.Fill>
+                        <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
+                            <GradientStop x:Name="topMostButton" Color="#FF74C105" Offset="0"/>
+                            <GradientStop Color="#FFB5FFB5" Offset="1"/>
+                        </LinearGradientBrush>
+                    </Ellipse.Fill>
+                </Ellipse>
+            </Button>
+            
+        </Grid>
+    </Border>
 </Window>
