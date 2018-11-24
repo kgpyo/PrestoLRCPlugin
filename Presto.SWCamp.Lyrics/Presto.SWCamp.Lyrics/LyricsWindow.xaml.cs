@@ -32,6 +32,7 @@ namespace Presto.SWCamp.Lyrics
 
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
+            
             lyricsData = new Dictionary<double, string>();
             lyrics = new List<KeyValuePair<double, string>>();
             //가사 데이터 읽어오기
@@ -95,11 +96,12 @@ namespace Presto.SWCamp.Lyrics
             timer.Tick += Timer_Tick;
             timer.Start();
         }
-
+        
         private void Timer_Tick(object sender, EventArgs e)
         {
             double cur = Presto.SDK.PrestoSDK.PrestoService.Player.Position;
-            //이분탐색 logn
+            //lyrics.BinarySearch(cur, IComparer<KeyValuePair<double, string>>());
+            //이분탐색
             int left = 0, right = lyrics.Count - 1, mid = 0, ans = 0;
             while(left<=right)
             {
@@ -113,7 +115,7 @@ namespace Presto.SWCamp.Lyrics
                     right = mid - 1;
                 }
             }
-            textLyrics.Text = cur + "\r\n" + lyrics[ans].Key + "\r\n" + lyrics[ans].Value;
+            textLyrics.Text = lyrics[ans].Value;
             /*
             for (int i=0;i<lyrics.Count;i+=1)
             {

@@ -9,7 +9,7 @@
     Width="600"
     Height="400"
     DataContext="{x:Static ps:PrestoSDK.PrestoService}"
-    mc:Ignorable="d" Background="#FFFFF0F0" AllowsTransparency="True" WindowStyle="None" Opacity="0.8">
+    mc:Ignorable="d" AllowsTransparency="True" WindowStyle="None" Opacity="0.8" Background="#FFFFF0F0">
 
     <StackPanel VerticalAlignment="Center">
         <TextBlock

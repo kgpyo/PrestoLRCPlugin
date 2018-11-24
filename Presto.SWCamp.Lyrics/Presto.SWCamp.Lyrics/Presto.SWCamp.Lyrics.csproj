@@ -54,6 +54,8 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Lyrics.cs" />
+    <Compile Include="LyricsManager.cs" />
     <Compile Include="LyricsWindow.xaml.cs">
       <DependentUpon>LyricsWindow.xaml</DependentUpon>
     </Compile>
