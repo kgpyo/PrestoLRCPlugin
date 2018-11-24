@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Presto.SDK;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.IO;
@@ -12,7 +13,6 @@ using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
-using System.Windows.Shapes;
 using System.Windows.Threading;
 
 namespace Presto.SWCamp.Lyrics
@@ -26,17 +26,26 @@ namespace Presto.SWCamp.Lyrics
         public LyricsWindow()
         {
             InitializeComponent();
+            PrestoSDK.PrestoService.Player.StreamChanged += Player_StreamChanged;
+        }
+
+        private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
+        {
             lyrics = new List<KeyValuePair<double, string>>();
             //가사 데이터 읽어오기
-            string[] lines = File.ReadAllLines(@"C:\Presto.Lyrics.Sample\Musics\숀 (SHAUN) - Way Back Home.lrc");
-            
+            var currentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
+            var lyricsFileName = Path.GetFileNameWithoutExtension(currentMusic) + ".lrc";
+            var parentPath = Path.GetDirectoryName(currentMusic);
+
+            string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName));
+
             foreach (var line in lines)
             {
-                string [] data = line.Split(']');
+                string[] data = line.Split(']');
                 double time = 0;
                 try
                 {
-                    time = TimeSpan.ParseExact(data[0].Substring(1).Trim(),@"mm\:ss\.ff", CultureInfo.InvariantCulture).TotalMilliseconds;
+                    time = TimeSpan.ParseExact(data[0].Substring(1).Trim(), @"mm\:ss\.ff", CultureInfo.InvariantCulture).TotalMilliseconds;
                 }
                 catch
                 {
@@ -51,7 +60,6 @@ namespace Presto.SWCamp.Lyrics
             };
             timer.Tick += Timer_Tick;
             timer.Start();
-
         }
 
         private void Timer_Tick(object sender, EventArgs e)
