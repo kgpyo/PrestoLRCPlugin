@@ -22,6 +22,7 @@ namespace Presto.SWCamp.Lyrics
     /// </summary>
     public partial class LyricsWindow : Window
     {
+        Dictionary<double, string> lyricsData;
         List<KeyValuePair<double, string>> lyrics;
         public LyricsWindow()
         {
@@ -31,6 +32,7 @@ namespace Presto.SWCamp.Lyrics
 
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
+            lyricsData = new Dictionary<double, string>();
             lyrics = new List<KeyValuePair<double, string>>();
             //가사 데이터 읽어오기
             var currentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
@@ -38,11 +40,17 @@ namespace Presto.SWCamp.Lyrics
             var parentPath = Path.GetDirectoryName(currentMusic);
 
             string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName));
-
+            //가사 파싱
             foreach (var line in lines)
             {
-                string[] data = line.Split(']');
+
+                int idx = line.IndexOf("]");
+                string[] data = {
+                    line.Substring(0,idx),
+                    line.Substring(idx+1)
+                };
                 double time = 0;
+                
                 try
                 {
                     time = TimeSpan.ParseExact(data[0].Substring(1).Trim(), @"mm\:ss\.ff", CultureInfo.InvariantCulture).TotalMilliseconds;
@@ -51,8 +59,24 @@ namespace Presto.SWCamp.Lyrics
                 {
                     continue;
                 }
-                lyrics.Add(new KeyValuePair<double, string>(time, data[1]));
+                string lyric = data[1];
+                if(lyricsData.ContainsKey(time) == true)
+                {
+                    if (lyric.Length != 0)
+                    {
+                        lyric = lyricsData[time] + "\n" + lyric;
+                        lyricsData.Remove(time);
+                    }
+                }
+                lyricsData.Add(time, lyric);
             }
+
+            foreach(KeyValuePair<double, string> data in lyricsData)
+            {
+                lyrics.Add(new KeyValuePair<double, string>(data.Key, data.Value));
+            }
+
+            lyrics.Sort((x,y)=>x.Value.CompareTo(y.Value));
 
             var timer = new DispatcherTimer
             {
