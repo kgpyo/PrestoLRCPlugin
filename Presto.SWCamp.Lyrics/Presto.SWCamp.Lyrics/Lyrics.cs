@@ -10,23 +10,20 @@ namespace Presto.SWCamp.Lyrics
     class Lyrics
     {
         public enum LRCFormat { Artist, Album, Title, Author, PlayeTime, LRCMaker, Lyrics, None };
-        public static List<string> Patterns = new List<string>()
-        {
-            {"^\\[ar:^.*s\\]$" },
-            {"^\\[al:^.*s\\]$" },
-            {"^\\[ti:^.*s\\]$" },
-            {"^\\[au:^.*s\\]$" },
-            {"^\\[length:^.*s\\]$" },
-            {"^\\[by:^.*s\\]$" },
-            {"^\\[[0-9]+:[0-9]+.[0-9]+\\]^.*s" }
-        };
-        public List<KeyValuePair<double, string>> Lines;    //가사 데이터
-        public int Sink { get; set; }                       //싱크 데이터
-        public string Title { get; set; }                   //제목
-        public string Artist { get; set; }                  //가수
-        public string Album { get; set; }                   //앨범
-        public string Author { get; set; }                  //작사가
-        public int Length { get; set; }                     //음악의 길이
-        public string By { get; set; }                      //LRC 작성자
+        public const string artistPattern = @"^\[ar:.*\]$";
+        public const string albumPattern = @"^\[al:.*\]$";
+        public const string titlePattern = @"^\[ti:.*\]$";
+        public const string authorPattern = @"^\[au:.*\]$";
+        public const string lengthPattern = @"^\[length:.*\]$";
+        public const string byPattern = @"^\[by:.*\]$";
+        public const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
+        public List<KeyValuePair<double, string>> Lines = new List<KeyValuePair<double, string>>();    //가사 데이터
+        public int Sync { get; set; }                       //싱크 데이터
+        public string Title { get; set; } = "정보없음";     //제목
+        public string Artist { get; set; } = "정보없음";    //가수
+        public string Album { get; set; } = "정보없음";     //앨범
+        public string Author { get; set; } = "정보없음";    //작사가
+        public int Length { get; set; } = 0;                //음악의 길이
+        public string By { get; set; } = "정보없음";        //LRC 작성자
     }
 }

@@ -13,11 +13,11 @@ namespace Presto.SWCamp.Lyrics
         private Lyrics lyrics;
         public LyricsManager()
         {
-            lyrics = new Lyrics();
         }
         
         public void StreamChanged()
         {
+            lyrics = new Lyrics();
             try
             {
                 string currentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
@@ -26,19 +26,20 @@ namespace Presto.SWCamp.Lyrics
                 string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName));
                 this.LyricsParsing(lines);
             }
-            catch
+            catch (Exception ex)
             {
-                lyrics.Lines.Add(new KeyValuePair<double, string>(0,"처리중 문제가 발생하였습니다."));
+                lyrics.Lines.Add(new KeyValuePair<double, string>(0,"처리중 문제가 발생하였습니다.\n" + ex.ToString()));
             }
         }
 
         // 포맷 파싱
         private void LyricsParsing(string[] lines)
         {
+            double time = 0;
             foreach(string data in lines)
             {
                 Lyrics.LRCFormat type = this.FindMatcingType(data.ToLower());
-                switch(type)
+                switch (type)
                 {
                     case Lyrics.LRCFormat.Title:
                         lyrics.Title = data;
@@ -59,33 +60,59 @@ namespace Presto.SWCamp.Lyrics
                         //lyrics.Length = data;
                         break;
                     case Lyrics.LRCFormat.Lyrics:
-                        int idx = data.IndexOf("]");
-                        string timeData = data.Substring(1, idx);
-                        string lyricsData = data.Substring(idx + 1);
-                        //double time = int.Parse(timeFormat[0]) * 1000 * 60 + int.Parse(timeFormat[1]) * 1000 + int.Parse(timeFormat[2]);
-                        //lyrics.Lines.Add(new KeyValuePair<double, string>(time, ddd[1]));
+                        int parseIdx = data.IndexOf("]");
+                        string timeData = data.Substring(1, parseIdx - 1);
+                        string lyricsData = data.Substring(parseIdx + 1);
+
+                        //시간영역 m,s,f
+                        string[] timeFormat = {
+                            timeData.Split(':')[0],
+                            timeData.Split(':')[1].Split('.')[0],
+                            timeData.Split(':')[1].Split('.')[1]
+                        };
+                        time = int.Parse(timeFormat[0]) * 1000 * 60 + int.Parse(timeFormat[1]) * 1000 + int.Parse(timeFormat[2]);
+                        lyrics.Lines.Add(new KeyValuePair<double, string>(time, lyricsData));
+
                         break;
                     case Lyrics.LRCFormat.None:
+                        if (lyrics.Lines.Count <= 0) break;
+                        string newData = lyrics.Lines.Last().Value + data;
+                        time = lyrics.Lines.Last().Key;
+                        lyrics.Lines.RemoveAt(lyrics.Lines.Count - 1);
+                        lyrics.Lines.Add(new KeyValuePair<double, string>(time, newData));
                         break;
+                }
+            }
+            lyrics.Lines.Sort((x, y) => x.Key.CompareTo(y.Key));
+
+            for (int i = 1; i < lyrics.Lines.Count; i++)
+            {
+                KeyValuePair<double, string> cur = lyrics.Lines[i];
+                KeyValuePair<double, string> prev = lyrics.Lines[i - 1];
+                if (cur.Key == prev.Key)
+                {
+                    lyrics.Lines[i - 1] = new KeyValuePair<double, string>(cur.Key, prev.Value + "\r\n" + cur.Value);
+                    lyrics.Lines.RemoveAt(i);
+                    i--;
                 }
             }
         }
 
         private Lyrics.LRCFormat FindMatcingType(string inputLine)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[0], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.artistPattern))
                 return Lyrics.LRCFormat.Artist;
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[1], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.albumPattern))
                 return Lyrics.LRCFormat.Album;
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[2], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.titlePattern))
                 return Lyrics.LRCFormat.Title;
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[3], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.authorPattern))
                 return Lyrics.LRCFormat.Author;
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[4], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.lengthPattern))
                 return Lyrics.LRCFormat.PlayeTime;
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[5], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.byPattern))
                 return Lyrics.LRCFormat.LRCMaker;
-            if (System.Text.RegularExpressions.Regex.IsMatch(Lyrics.Patterns[6], inputLine))
+            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, Lyrics.syncPattern))
                 return Lyrics.LRCFormat.Lyrics;
             
             return Lyrics.LRCFormat.None;
@@ -93,9 +120,11 @@ namespace Presto.SWCamp.Lyrics
 
         public string GetCurrentLyric(double position)
         {
-            string preparing = "전주중";
+            string preparing = "준비중";
+            if (lyrics == null || lyrics.Lines.Count <= 0 || position < 0)
+                return preparing;
             int lyricsLength = lyrics.Lines.Count;
-            int left = 0, right = lyricsLength, mid = 0, closeLyrics = -1;
+            int left = 0, right = lyricsLength-1, mid = 0, closeLyrics = -1;
             while(left<=right)
             {
                 mid = (left + right);
@@ -110,7 +139,13 @@ namespace Presto.SWCamp.Lyrics
                 }
             }
             if (closeLyrics == -1)
-                return preparing;
+            {
+                string infoData = "Album: " + lyrics.Album + "\n" +
+                    "Title: " + lyrics.Title + "\n" +
+                    "Author: " + lyrics.Author + "\n" +
+                    "By: " + lyrics.By;
+                return infoData;
+            }
 
             return lyrics.Lines[closeLyrics].Value;
         }
