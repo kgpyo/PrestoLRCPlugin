@@ -50,10 +50,20 @@ namespace Presto.SWCamp.Lyrics
                     line.Substring(idx+1)
                 };
                 double time = 0;
-                
+
                 try
                 {
-                    time = TimeSpan.ParseExact(data[0].Substring(1).Trim(), @"mm\:ss\.ff", CultureInfo.InvariantCulture).TotalMilliseconds;
+                    //시간 파싱
+                    string[] remain = data[0].Substring(1).Split(':')[1].Split('.');
+                    string[] timeFormat = {
+                        data[0].Substring(1).Split(':')[0],
+                        remain[0],
+                        remain[1]
+                    };
+
+                    //mm:ss.ff to milliseconds
+                    time = int.Parse(timeFormat[0])*1000*60 + int.Parse(timeFormat[1])*1000 + int.Parse(timeFormat[2]);
+                    //time = TimeSpan.ParseExact(data[0].Substring(1).Trim(), @"mm\:ss\.ff", CultureInfo.InvariantCulture).TotalMilliseconds;
                 }
                 catch
                 {
@@ -64,7 +74,7 @@ namespace Presto.SWCamp.Lyrics
                 {
                     if (lyric.Length != 0)
                     {
-                        lyric = lyricsData[time] + "\n" + lyric;
+                        lyric = lyricsData[time] + "\r\n" + lyric;
                         lyricsData.Remove(time);
                     }
                 }
@@ -76,7 +86,7 @@ namespace Presto.SWCamp.Lyrics
                 lyrics.Add(new KeyValuePair<double, string>(data.Key, data.Value));
             }
 
-            lyrics.Sort((x,y)=>x.Value.CompareTo(y.Value));
+            lyrics.Sort((x,y)=>x.Key.CompareTo(y.Key));
 
             var timer = new DispatcherTimer
             {
@@ -89,6 +99,22 @@ namespace Presto.SWCamp.Lyrics
         private void Timer_Tick(object sender, EventArgs e)
         {
             double cur = Presto.SDK.PrestoSDK.PrestoService.Player.Position;
+            //이분탐색 logn
+            int left = 0, right = lyrics.Count - 1, mid = 0, ans = 0;
+            while(left<=right)
+            {
+                mid = (left + right) / 2;
+                if(lyrics[mid].Key <= cur)
+                {
+                    ans = mid;
+                    left = mid + 1;
+                } else
+                {
+                    right = mid - 1;
+                }
+            }
+            textLyrics.Text = cur + "\r\n" + lyrics[ans].Key + "\r\n" + lyrics[ans].Value;
+            /*
             for (int i=0;i<lyrics.Count;i+=1)
             {
                 double time = lyrics[i].Key;
@@ -106,6 +132,7 @@ namespace Presto.SWCamp.Lyrics
                     textLyrics.Text = text;
                 }
             }
+            */
         }
     }
 }

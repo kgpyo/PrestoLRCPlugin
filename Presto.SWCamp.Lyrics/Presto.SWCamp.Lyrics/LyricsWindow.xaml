@@ -18,6 +18,7 @@
             TextAlignment="Center" />
 
         <TextBlock
+            TextWrapping="Wrap"
             x:Name="textLyrics"
             FontSize="24"
             Text="가사가 여기에 표시됩니다."
