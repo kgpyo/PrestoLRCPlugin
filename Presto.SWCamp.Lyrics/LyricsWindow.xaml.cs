@@ -27,6 +27,9 @@ namespace Presto.SWCamp.Lyrics
         {
             InitializeComponent();
             PrestoSDK.PrestoService.Player.StreamChanged += Player_StreamChanged;
+            this.Left = SystemParameters.WorkArea.Width - this.Width;
+            this.Top = SystemParameters.WorkArea.Height - this.Height;
+
             lyricsManager = new LyricsManager();
 
             var timer = new DispatcherTimer
