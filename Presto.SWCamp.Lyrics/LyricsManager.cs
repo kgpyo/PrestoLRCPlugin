@@ -77,7 +77,7 @@ namespace Presto.SWCamp.Lyrics
                         break;
                     //텍스트만 존재할경우 이전가사와 합침
                     case LRCFormat.None:
-                        if (lyrics.Lines.Count <= 0) break;
+                        if (lyrics.Lines.Count <= 0 || data == "") break;
                         string newData = lyrics.Lines.Last().Value + data;
                         time = lyrics.Lines.Last().Key;
                         lyrics.Lines.RemoveAt(lyrics.Lines.Count - 1);
@@ -85,7 +85,8 @@ namespace Presto.SWCamp.Lyrics
                         break;
                 }
             }
-            lyrics.Lines.Sort((x, y) => x.Key.CompareTo(y.Key));
+            //lyrics.Lines.Sort((x, y) => x.Key.CompareTo(y.Key));
+            lyrics.Lines.OrderBy(x => x.Key); //안정정렬
 
             //중복된 시간을 가진 가사가 여러개 있을경우 하나로 합침
             for (int i = 1; i < lyrics.Lines.Count; i++)
