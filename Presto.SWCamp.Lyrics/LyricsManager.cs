@@ -29,7 +29,7 @@ namespace Presto.SWCamp.Lyrics
                 CurrentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
                 string lyricsFileName = Path.GetFileNameWithoutExtension(CurrentMusic) + ".lrc";
                 string parentPath = Path.GetDirectoryName(CurrentMusic);
-                string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName));
+                string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName), Encoding.Default);
                 this.LyricsParsing(lines);
             }
             catch
