@@ -39,6 +39,7 @@ namespace Presto.SWCamp.Lyrics
                 string bitrate = PrestoSDK.PrestoService.Player.CurrentMusic.Bitrate.ToString();
                 if (artist == null) artist = "알수없는 음악가";
                 if (album == null) album = "알 수 없는 앨범";
+                if (bitrate == "0") bitrate = "알수없음";
                 lyrics.Lines.Add(new KeyValuePair<double, string>(0,artist + "/" + album + "/" + bitrate + "kbps"
                     + "\n가사를 불러올 수 없습니다."));
             }

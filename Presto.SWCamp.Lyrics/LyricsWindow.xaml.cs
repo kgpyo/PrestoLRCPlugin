@@ -67,15 +67,20 @@ namespace Presto.SWCamp.Lyrics
 
         private void PlayOrPauseButton_Click(object sender, RoutedEventArgs e)
         {
-            if(PrestoSDK.PrestoService.Player.PlaybackState == Common.PlaybackState.Playing)
+            switch (PrestoSDK.PrestoService.Player.PlaybackState)
             {
-                playStatus.Content = "||";
-                PrestoSDK.PrestoService.Player.Pause();
-            }
-            else
-            {
-                playStatus.Content = "";
-                PrestoSDK.PrestoService.Player.Play();
+                case Common.PlaybackState.Playing:
+                    playStatus.Content = "||";
+                    PrestoSDK.PrestoService.Player.Pause();
+                    break;
+                case Common.PlaybackState.Paused:
+                    playStatus.Content = "";
+                    PrestoSDK.PrestoService.Player.Resume();
+                    break;
+                case Common.PlaybackState.Stopped:
+                    playStatus.Content = "";
+                    PrestoSDK.PrestoService.Player.Play();
+                    break;
             }
         }
 
