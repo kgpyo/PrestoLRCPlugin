@@ -12,16 +12,13 @@
     Margin="5"
     Background="{x:Null}" WindowStyle="None" AllowsTransparency="True"
     MouseLeftButtonDown="Window_MouseDown">
-    <Border BorderBrush="Gray" BorderThickness="0" Background="White" Margin="5" Opacity="0.8">
-        <Border.Effect>
-            <DropShadowEffect ShadowDepth="0" BlurRadius="10" Color="Gray" />
-        </Border.Effect>
+    <Grid Margin="5">
+        <Border BorderBrush="Gray" BorderThickness="0" Margin="0" Opacity="0.8" Background="White">
+            <Border.Effect>
+                <DropShadowEffect ShadowDepth="0" BlurRadius="10" Color="Gray" />
+            </Border.Effect>
+        </Border>
         <Grid>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="139*"/>
-                <ColumnDefinition Width="56*"/>
-            </Grid.ColumnDefinitions>
-            <Grid Grid.ColumnSpan="2">
                 <StackPanel Width="100" Height="100" HorizontalAlignment="Left" Margin="3">
                     <StackPanel.Background>
                         <ImageBrush ImageSource="noAlbumArt.JPG"/>
@@ -52,7 +49,7 @@
                     TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                 </Border>
             </StackPanel>
-            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,1,1,0" Background="White" BorderBrush="{x:Null}" Click="CloseButton_Click" ToolTip="닫기" Grid.Column="1">
+            <Button VerticalAlignment="Top" HorizontalAlignment="Right" Margin="0,1,1,0" Background="{x:Null}" BorderBrush="{x:Null}" Click="CloseButton_Click" ToolTip="숨기기" Grid.Column="1">
                 <Ellipse Height="10"  Width="10">
                     <Ellipse.Fill>
                         <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
@@ -72,6 +69,7 @@
                     </Ellipse.Fill>
                 </Ellipse>
             </Button>
-        </Grid>
-    </Border>
+        
+    </Grid>
+
 </Window>

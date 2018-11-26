@@ -42,7 +42,13 @@ namespace Presto.SWCamp.Lyrics
 
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
+            this.Show();
             lyricsManager.StreamChanged();
+            
+            //GC 강제 실행
+            System.GC.Collect(2, GCCollectionMode.Forced);
+            System.GC.WaitForFullGCComplete();
+
             if (PrestoSDK.PrestoService.Player.CurrentMusic.Title == null)
             {
                 string fileName = Path.GetFileNameWithoutExtension(lyricsManager.CurrentMusic);
@@ -95,7 +101,7 @@ namespace Presto.SWCamp.Lyrics
         /* 우상단 버튼 관리 */
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Close();
+            this.Hide();
         }
 
         private void TopMostButton_Click(object sender, RoutedEventArgs e)

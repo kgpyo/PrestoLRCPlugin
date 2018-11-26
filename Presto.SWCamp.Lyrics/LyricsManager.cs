@@ -23,6 +23,7 @@ namespace Presto.SWCamp.Lyrics
                 
         public void StreamChanged()
         {
+            lyrics = null;//GCC
             lyrics = new Lyrics();
             try
             {
