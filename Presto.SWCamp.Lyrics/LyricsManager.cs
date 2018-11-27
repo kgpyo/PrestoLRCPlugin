@@ -19,6 +19,7 @@ namespace Presto.SWCamp.Lyrics
         private const string byPattern = @"^\[by:.*\]$";
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
         private Lyrics lyrics;
+       
         public string CurrentMusic { get; set; } = null;
                 
         public void StreamChanged()
@@ -154,7 +155,21 @@ namespace Presto.SWCamp.Lyrics
                 return infoData;
             }
 
-            return lyrics.Lines[closeLyrics].Value;
+            if (mid < lyrics.Lines.Count-1)
+            {
+                ///lyrics.Arr.Insert(0, lyrics.Lines[mid - 1].Value);
+                ///lyrics.Arr.Insert(1, lyrics.Lines[closeLyrics].Value);
+                ///lyrics.Arr.Insert(2, lyrics.Lines[mid + 1].Value);
+                ///return lyrics.Arr;
+                return lyrics.Lines[mid - 1].Value +
+                "\n" + lyrics.Lines[closeLyrics].Value + "\n" + lyrics.Lines[mid + 1].Value;
+            }
+            else
+            {
+                return lyrics.Lines[mid - 1].Value +
+                "\n" + lyrics.Lines[closeLyrics].Value;
+            }
+            
         }
     }
 }
