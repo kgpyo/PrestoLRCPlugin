@@ -131,7 +131,13 @@ namespace Presto.SWCamp.Lyrics
                 return preparing;
             int lyricsLength = lyrics.Lines.Count;
             int left = 0, right = lyricsLength-1, mid = 0, closeLyrics = -1;
-            while(left<=right)
+            
+            //closeLyrics = lyrics.Lines.BinarySearch(new KeyValuePair<double,string>(position,null));
+
+            //if (closeLyrics < 0)
+            //     return lyrics.Lines[Math.Max(0, ~closeLyrics - 1)].Value;
+
+            while (left<=right)
             {
                 mid = (left + right);
                 if(lyrics.Lines[mid].Key <= position)
