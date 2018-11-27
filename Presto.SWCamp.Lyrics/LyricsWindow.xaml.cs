@@ -59,7 +59,6 @@ namespace Presto.SWCamp.Lyrics
         private void Timer_Tick(object sender, EventArgs e)
         {
             double cur = PrestoSDK.PrestoService.Player.Position;
-            textLyrics.Text = lyricsManager.GetCurrentLyric(cur);
         }
 
         /* 창 드래그 */
@@ -68,7 +67,7 @@ namespace Presto.SWCamp.Lyrics
             if (e.RightButton != MouseButtonState.Pressed) DragMove();
         }
 
-        /* 앨범아트 버튼 관리 */
+        /*
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
             PrestoSDK.PrestoService.Player.PlayPrevious();
@@ -98,7 +97,7 @@ namespace Presto.SWCamp.Lyrics
             PrestoSDK.PrestoService.Player.PlayNext();
         }
 
-        /* 우상단 버튼 관리 */
+        /* 우상단 버튼 관리 
         private void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             this.Hide();
@@ -118,5 +117,6 @@ namespace Presto.SWCamp.Lyrics
                 this.Topmost = false;
             }
         }
+        */
     }
 }
