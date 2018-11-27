@@ -54,6 +54,7 @@
     <Reference Include="PresentationFramework" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AlbumartManager.cs" />
     <Compile Include="AlsongLRCManager.cs" />
     <Compile Include="Lyrics.cs" />
     <Compile Include="LyricsManager.cs" />
