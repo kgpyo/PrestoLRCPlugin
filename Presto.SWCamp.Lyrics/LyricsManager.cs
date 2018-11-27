@@ -18,7 +18,7 @@ namespace Presto.SWCamp.Lyrics
         private const string lengthPattern = @"^\[length:.*\]$";
         private const string byPattern = @"^\[by:.*\]$";
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
-        private string[] str = new string[3];
+        private string[] str = new string[4];
         private Lyrics lyrics;
         
         public string CurrentMusic { get; set; } = null;
@@ -158,20 +158,24 @@ namespace Presto.SWCamp.Lyrics
                  str[0] = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
                     "작사가: " + lyrics.Author + "\n" +
                     "가사 만든이: " + lyrics.By;
+                str[3] = "1";
                 return str;
             }
 
             if (mid < lyrics.Lines.Count-1)
             {
-                str[0] = lyrics.Lines[mid - 1].Value +
-                "\n" + lyrics.Lines[closeLyrics].Value + "\n" + lyrics.Lines[mid - 1].Value;
+                str[0] = lyrics.Lines[mid - 1].Value;
+                str[1] = lyrics.Lines[closeLyrics].Value;
+                str[2] = lyrics.Lines[mid - 1].Value;
+                str[3] = "3";
                 return str; 
                 
             }
             else
             {
-                str[0] = lyrics.Lines[mid - 1].Value +
-                "\n" + lyrics.Lines[closeLyrics].Value;
+                str[0] = lyrics.Lines[mid - 1].Value;
+                str[1] = lyrics.Lines[closeLyrics].Value;
+                str[3] = "2";
                 return str;
             }
             

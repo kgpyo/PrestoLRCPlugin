@@ -23,7 +23,7 @@ namespace Presto.SWCamp.Lyrics
     public partial class LyricsWindow : Window
     {
         LyricsManager lyricsManager;
-        string[] str = new string[3];
+        string[] str = new string[4];
         public LyricsWindow()
         {
             InitializeComponent();
@@ -64,20 +64,33 @@ namespace Presto.SWCamp.Lyrics
             str[0] = "";
            
             ///string str = lyricsManager.GetCurrentLyric(cur);
-            string str2 = lyricsManager.GetCurrentLyric(cur)[0];
-            str[0] = str2;
+            ///string str2 = lyricsManager.GetCurrentLyric(cur)[0];
+            str = lyricsManager.GetCurrentLyric(cur);
             if (str[0] == "가사 준비중입니다.")
             {
                 textLyrics.Text = str[0];
             }
-            else
+            else if(str[3] == "1")
             {
                 ///textLyrics.Text = lyricsManager.GetCurrentLyric(cur);
                 string[] arr = str[0].Split('\n');
                 textLyrics.Inlines.Clear();
                 textLyrics.Inlines.Add(new Run { Text = arr[0] + "\n" });
-                textLyrics.Inlines.Add(new Run { Text = arr[1] + "\n", FontWeight = FontWeights.Bold });
+                textLyrics.Inlines.Add(new Run { Text = arr[1] + "\n" });
                 textLyrics.Inlines.Add(new Run { Text = arr[2] });
+            }
+            else if(str[3] == "2")
+            {                
+                textLyrics.Inlines.Clear();
+                textLyrics.Inlines.Add(new Run { Text = str[0] + "\n" });
+                textLyrics.Inlines.Add(new Run { Text = str[1] , FontWeight = FontWeights.Bold });           
+            }
+            else if(str[3] == "3")
+            {           
+                textLyrics.Inlines.Clear();
+                textLyrics.Inlines.Add(new Run { Text = str[0] + "\n" });
+                textLyrics.Inlines.Add(new Run { Text = str[1] + "\n", FontWeight = FontWeights.Bold });
+                textLyrics.Inlines.Add(new Run { Text = str[2]});
             }
 
             
