@@ -7,12 +7,12 @@
     xmlns:ps="clr-namespace:Presto.SDK;assembly=Presto.SDK"
     Title="플레이어 가사 창"
     Width="400"
-    Height="120"
+    Height="400"
     DataContext="{x:Static ps:PrestoSDK.PrestoService}"
     Margin="5"
     Background="{x:Null}" WindowStyle="None" AllowsTransparency="True"
     MouseLeftButtonDown="Window_MouseDown">
-    <Grid Margin="5">
+    <Grid Margin="5,0">
         <Border BorderBrush="Gray" BorderThickness="0" Margin="0" Opacity="0.8" Background="White">
             <Border.Effect>
                 <DropShadowEffect ShadowDepth="0" BlurRadius="10" Color="Gray" />
