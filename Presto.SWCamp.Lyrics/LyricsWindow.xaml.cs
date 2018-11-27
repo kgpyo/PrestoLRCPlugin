@@ -23,6 +23,7 @@ namespace Presto.SWCamp.Lyrics
     public partial class LyricsWindow : Window
     {
         LyricsManager lyricsManager;
+        string[] str = new string[3];
         public LyricsWindow()
         {
             InitializeComponent();
@@ -58,8 +59,29 @@ namespace Presto.SWCamp.Lyrics
         
         private void Timer_Tick(object sender, EventArgs e)
         {
+            
             double cur = PrestoSDK.PrestoService.Player.Position;
-            textLyrics.Text = lyricsManager.GetCurrentLyric(cur);
+            str[0] = "";
+           
+            ///string str = lyricsManager.GetCurrentLyric(cur);
+            string str2 = lyricsManager.GetCurrentLyric(cur)[0];
+            str[0] = str2;
+            if (str[0] == "가사 준비중입니다.")
+            {
+                textLyrics.Text = str[0];
+            }
+            else
+            {
+                ///textLyrics.Text = lyricsManager.GetCurrentLyric(cur);
+                string[] arr = str[0].Split('\n');
+                textLyrics.Inlines.Clear();
+                textLyrics.Inlines.Add(new Run { Text = arr[0] + "\n" });
+                textLyrics.Inlines.Add(new Run { Text = arr[1] + "\n", FontWeight = FontWeights.Bold });
+                textLyrics.Inlines.Add(new Run { Text = arr[2] });
+            }
+
+            
+            
         }
 
         /* 창 드래그 */
@@ -82,7 +104,7 @@ namespace Presto.SWCamp.Lyrics
                     playStatus.Content = "||";
                     PrestoSDK.PrestoService.Player.Pause();
                     break;
-                case Common.PlaybackState.Paused:g
+                case Common.PlaybackState.Paused:
                     playStatus.Content = "";
                     PrestoSDK.PrestoService.Player.Resume();
                     break;

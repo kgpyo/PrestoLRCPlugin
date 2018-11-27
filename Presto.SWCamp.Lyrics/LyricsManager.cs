@@ -18,8 +18,9 @@ namespace Presto.SWCamp.Lyrics
         private const string lengthPattern = @"^\[length:.*\]$";
         private const string byPattern = @"^\[by:.*\]$";
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
+        private string[] str = new string[3];
         private Lyrics lyrics;
-       
+        
         public string CurrentMusic { get; set; } = null;
                 
         public void StreamChanged()
@@ -125,11 +126,16 @@ namespace Presto.SWCamp.Lyrics
             return LRCFormat.None;
         }
 
-        public string GetCurrentLyric(double position)
+        public string[] GetCurrentLyric(double position)
         {
-            string preparing = "가사 준비중입니다.";
+            str[0] = "";
+            ///string preparing = "가사 준비중입니다.";
             if (lyrics == null || lyrics.Lines.Count <= 0 || position < 0)
-                return preparing;
+            {
+                str[0] = "가사 준비중입니다.";
+                return str;
+            }
+                
             int lyricsLength = lyrics.Lines.Count;
             int left = 0, right = lyricsLength-1, mid = 0, closeLyrics = -1;
             while(left<=right)
@@ -149,25 +155,24 @@ namespace Presto.SWCamp.Lyrics
             //근접한 위치를 찾을 수 없을경우 가사파일 정보를 출력
             if (closeLyrics == -1)
             {
-                string infoData = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
+                 str[0] = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
                     "작사가: " + lyrics.Author + "\n" +
                     "가사 만든이: " + lyrics.By;
-                return infoData;
+                return str;
             }
 
             if (mid < lyrics.Lines.Count-1)
             {
-                ///lyrics.Arr.Insert(0, lyrics.Lines[mid - 1].Value);
-                ///lyrics.Arr.Insert(1, lyrics.Lines[closeLyrics].Value);
-                ///lyrics.Arr.Insert(2, lyrics.Lines[mid + 1].Value);
-                ///return lyrics.Arr;
-                return lyrics.Lines[mid - 1].Value +
-                "\n" + lyrics.Lines[closeLyrics].Value + "\n" + lyrics.Lines[mid + 1].Value;
+                str[0] = lyrics.Lines[mid - 1].Value +
+                "\n" + lyrics.Lines[closeLyrics].Value + "\n" + lyrics.Lines[mid - 1].Value;
+                return str; 
+                
             }
             else
             {
-                return lyrics.Lines[mid - 1].Value +
+                str[0] = lyrics.Lines[mid - 1].Value +
                 "\n" + lyrics.Lines[closeLyrics].Value;
+                return str;
             }
             
         }
