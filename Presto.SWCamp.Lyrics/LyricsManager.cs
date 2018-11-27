@@ -20,7 +20,10 @@ namespace Presto.SWCamp.Lyrics
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
         private Lyrics lyrics;
         public string CurrentMusic { get; set; } = null;
-                
+        List<double> timestore;
+        Dictionary<double, string> lyricsMap;
+        
+            
         public void StreamChanged()
         {
             lyrics = null;//GCC
@@ -50,7 +53,9 @@ namespace Presto.SWCamp.Lyrics
         private void LyricsParsing(string[] lines)
         {
             double time = 0;
-            foreach(string data in lines)
+            lyricsMap = new Dictionary<double, string>();
+            timestore = new List<double>();
+            foreach (string data in lines)
             {
                 LRCFormat type = this.FindMatcingType(data.ToLower());
                 switch (type)
@@ -65,6 +70,7 @@ namespace Presto.SWCamp.Lyrics
                         int parseIdx = data.IndexOf("]");
                         string timeData = data.Substring(1, parseIdx - 1);
                         string lyricsData = data.Substring(parseIdx + 1);
+                        
 
                         //시간영역 m,s,f
                         string[] timeFormat = {
@@ -74,6 +80,9 @@ namespace Presto.SWCamp.Lyrics
                         };
                         time = int.Parse(timeFormat[0]) * 1000 * 60 + int.Parse(timeFormat[1]) * 1000 + int.Parse(timeFormat[2]);
                         lyrics.Lines.Add(new KeyValuePair<double, string>(time, lyricsData));
+                        timestore.Add(time);
+                        lyricsMap.Add(time, lyricsData);
+
 
                         break;
                     //텍스트만 존재할경우 이전가사와 합침
@@ -83,6 +92,8 @@ namespace Presto.SWCamp.Lyrics
                         time = lyrics.Lines.Last().Key;
                         lyrics.Lines.RemoveAt(lyrics.Lines.Count - 1);
                         lyrics.Lines.Add(new KeyValuePair<double, string>(time, newData));
+                        timestore.Add(time);
+                        lyricsMap.Add(time, newData);
                         break;
                 }
             }
@@ -97,6 +108,9 @@ namespace Presto.SWCamp.Lyrics
                 if (cur.Key == prev.Key)
                 {
                     lyrics.Lines[i - 1] = new KeyValuePair<double, string>(cur.Key, prev.Value + "\r\n" + cur.Value);
+                    timestore[i - 1] = lyrics.Lines[i].Key;
+                    lyricsMap.Add(lyrics.Lines[i].Key, lyrics.Lines[i - 1].Value + "\r\n" + lyrics.Lines[i].Value);
+                    timestore.Remove(i);
                     lyrics.Lines.RemoveAt(i);
                     i--;
                 }
@@ -127,16 +141,15 @@ namespace Presto.SWCamp.Lyrics
         public string GetCurrentLyric(double position)
         {
             string preparing = "가사 준비중입니다.";
+            
             if (lyrics == null || lyrics.Lines.Count <= 0 || position < 0)
                 return preparing;
             int lyricsLength = lyrics.Lines.Count;
             int left = 0, right = lyricsLength-1, mid = 0, closeLyrics = -1;
             
-            //closeLyrics = lyrics.Lines.BinarySearch(new KeyValuePair<double,string>(position,null));
-
-            //if (closeLyrics < 0)
-            //     return lyrics.Lines[Math.Max(0, ~closeLyrics - 1)].Value;
-
+            closeLyrics = timestore.BinarySearch(position);
+            
+            /*
             while (left<=right)
             {
                 mid = (left + right);
@@ -150,17 +163,17 @@ namespace Presto.SWCamp.Lyrics
                     right = mid - 1;
                 }
             }
-
+            */
             //근접한 위치를 찾을 수 없을경우 가사파일 정보를 출력
-            if (closeLyrics == -1)
+            if (closeLyrics>=0)
             {
                 string infoData = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
                     "작사가: " + lyrics.Author + "\n" +
                     "가사 만든이: " + lyrics.By;
                 return infoData;
             }
-
-            return lyrics.Lines[closeLyrics].Value;
+            else
+            return lyricsMap[timestore[Math.Max(0, ~closeLyrics - 1)]];
         }
     }
 }
