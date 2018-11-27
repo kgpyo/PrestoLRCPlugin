@@ -82,7 +82,7 @@ namespace Presto.SWCamp.Lyrics
                     playStatus.Content = "||";
                     PrestoSDK.PrestoService.Player.Pause();
                     break;
-                case Common.PlaybackState.Paused:
+                case Common.PlaybackState.Paused:g
                     playStatus.Content = "";
                     PrestoSDK.PrestoService.Player.Resume();
                     break;

@@ -40,13 +40,29 @@
                     FontSize="14"
                     Text="{Binding Player.CurrentMusic.Title}"
                     TextAlignment="Center" FontWeight="Bold" Height="20" />
-            <Border BorderBrush="{x:Null}" Height="80">
+            <Border BorderBrush="{x:Null}" Height="26">
                 <TextBlock
                     TextWrapping="Wrap"
-                    x:Name="textLyrics"
+                    x:Name="textLyrics_front"
+                    FontSize="12"
+                    Text=""
+                    TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Border BorderBrush="{x:Null}" Height="27">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    x:Name="textLyrics_current"
                     FontSize="12"
                     FontWeight="Bold"
                     Text="가사가 여기에 표시됩니다."
+                    TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+            </Border>
+            <Border BorderBrush="{x:Null}" Height="26">
+                <TextBlock
+                    TextWrapping="Wrap"
+                    x:Name="textLyrics_rear"
+                    FontSize="12"
+                    Text=""
                     TextAlignment="Center" HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Border>
         </StackPanel>
