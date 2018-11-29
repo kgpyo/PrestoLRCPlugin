@@ -57,6 +57,9 @@
     <Compile Include="AlbumartManager.cs" />
     <Compile Include="AlsongLRCManager.cs" />
     <Compile Include="Lyrics.cs" />
+    <Compile Include="LyricsLargeWindow.xaml.cs">
+      <DependentUpon>LyricsLargeWindow.xaml</DependentUpon>
+    </Compile>
     <Compile Include="LyricsManager.cs" />
     <Compile Include="LyricsWindow.xaml.cs">
       <DependentUpon>LyricsWindow.xaml</DependentUpon>
@@ -88,6 +91,10 @@
     </None>
   </ItemGroup>
   <ItemGroup>
+    <Page Include="LyricsLargeWindow.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="LyricsWindow.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
