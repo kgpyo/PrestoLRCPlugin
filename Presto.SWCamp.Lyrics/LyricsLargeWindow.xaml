@@ -139,12 +139,12 @@
                     <ColumnDefinition Width="8" />
                 </Grid.ColumnDefinitions>
                 <TextBlock Grid.Column="1" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" Text="offset" FontSize="10"/>
-                <TextBlock Grid.Column="2" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" />
-                <Button Grid.Column="4" BorderBrush="{x:Null}" Background="{x:Null}" Content="-" Foreground="White" />
-                <Button Grid.Column="5" BorderBrush="{x:Null}" Background="{x:Null}" Content="+" Foreground="White" />
-                <Button Grid.Column="6" BorderBrush="{x:Null}" Background="{x:Null}" Content="O" Foreground="White" />
-                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="&#11035;" Foreground="White" />
-                <Button Grid.Column="8" BorderBrush="{x:Null}" Background="{x:Null}" Content="X" Foreground="White" />
+                <TextBlock Grid.Column="2" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" Text="0" x:Name="offsetValue"/>
+                <TextBlock Grid.Column="3" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" Text="ms"/>
+                <Button Grid.Column="4" BorderBrush="{x:Null}" Background="{x:Null}" Content="-" Foreground="White" Click="OffsetMinusButton_Click"/>
+                <Button Grid.Column="5" BorderBrush="{x:Null}" Background="{x:Null}" Content="+" Foreground="White" Click="OffsetPlusButton_Click" />
+                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="_" Foreground="White" Click="MinimizeButton_Click"/>
+                <Button Grid.Column="8" BorderBrush="{x:Null}" Background="{x:Null}" Content="X" Foreground="White" Click="HideButton_Click"/>
             </Grid>
         </Grid>
     </Border>

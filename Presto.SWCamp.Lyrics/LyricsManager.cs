@@ -185,5 +185,15 @@ namespace Presto.SWCamp.Lyrics
         {
             return this.lyrics.Lines;
         }
+
+        public void SetOffset(double offset)
+        {
+            this.lyrics.Offset += offset;
+        }
+
+        public double GetOffset()
+        {
+            return this.lyrics.Offset;
+        }
     }
 }

@@ -99,7 +99,7 @@ namespace Presto.SWCamp.Lyrics
         {
             double cur = PrestoSDK.PrestoService.Player.Position;
 
-            // 재생중일때만 가사 위치 변경
+            // 재생중일때만 가사 위치 변경, 오프셋 반영
             if (cur > 0 && PrestoSDK.PrestoService.Player.PlaybackState == Common.PlaybackState.Playing)
             {
                 int listBoxIndex = lyricsManager.GetCurrentLyricsIndex(cur);
@@ -111,24 +111,23 @@ namespace Presto.SWCamp.Lyrics
                     isAutoLyricsIndexChange = true;
                     lyricsList.SelectedIndex = listBoxIndex;
                 }
+
+                //Offset값
+                offsetValue.Text = lyricsManager.GetOffset().ToString();
             }
             else
             {
                 isAutoLyricsIndexChange = true;
                 lyricsList.SelectedIndex = 0;
             }
-
-        }
-
-        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
-        {
-            if (e.RightButton != MouseButtonState.Pressed) DragMove();
         }
 
         private void LyricsList_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             int selectedIndex = lyricsList.SelectedIndex;
-
+            // 유효한 범위가 아니라면 실행하지 않음
+            if (!(selectedIndex >=0 && selectedIndex<lyricsList.Items.Count))
+                return;
             //자동 스크롤
             lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex]);
 
@@ -144,6 +143,13 @@ namespace Presto.SWCamp.Lyrics
             PrestoSDK.PrestoService.Player.Position = position;
         }
 
+        /* 윈도우 창 */
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton != MouseButtonState.Pressed) DragMove();
+        }
+
+        /* 버튼 구역 */
         private void PlayOrPauseButton_Click(object sender, RoutedEventArgs e)
         {
             switch (PrestoSDK.PrestoService.Player.PlaybackState)
@@ -214,6 +220,28 @@ namespace Presto.SWCamp.Lyrics
             {
                 PrestoSDK.PrestoService.Player.ShuffleMode = Common.ShuffleMode.None;
             }
+        }
+
+        private void HideButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+        }
+
+        private void MinimizeButton_Click(object sender, RoutedEventArgs e)
+        {
+            this.Hide();
+            isThisWindowShow = false;
+        }
+
+        private void OffsetMinusButton_Click(object sender, RoutedEventArgs e)
+        {
+            //500밀리세컨드 간격 조절
+            lyricsManager.SetOffset(-500);
+        }
+
+        private void OffsetPlusButton_Click(object sender, RoutedEventArgs e)
+        {
+            lyricsManager.SetOffset(500);
         }
     }
 }
