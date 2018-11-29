@@ -208,17 +208,5 @@ namespace Presto.SWCamp.Lyrics
             if (this.lyrics == null) return 0;
             return this.lyrics.Offset;
         }
-
-        //현재 가사의 출력 라인수
-        public int GetLine(int index)
-        {
-            if (this.lyrics == null) return 0;
-            double position = this.timeList[index] - this.lyrics.Offset;
-            if (position < 0)
-                position = 0;
-            if (position > PrestoSDK.PrestoService.Player.Length)
-                position = PrestoSDK.PrestoService.Player.Length - 1;
-            return this.lyrics.Lines[position].Split('\n').Length;
-        }
     }
 }

@@ -143,12 +143,12 @@
                 <TextBlock Grid.Column="1" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" Text="offset" FontSize="10"/>
                 <TextBlock Grid.Column="2" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" Text="0" x:Name="offsetValue"/>
                 <TextBlock Grid.Column="3" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" Text="ms"/>
-                <Button Grid.Column="4" BorderBrush="{x:Null}" Background="{x:Null}" Content="-" Foreground="White" Click="OffsetMinusButton_Click"/>
-                <Button Grid.Column="5" BorderBrush="{x:Null}" Background="{x:Null}" Content="+" Foreground="White" Click="OffsetPlusButton_Click" />
-                <Button Grid.Column="6" BorderBrush="{x:Null}" Background="{x:Null}" Content="↓" Foreground="White" Click="PreviousLyricsDataButton_Click" />
-                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="↑" Foreground="White" Click="NextLyricsDataButon_Click" />
-                <Button Grid.Column="9" BorderBrush="{x:Null}" Background="{x:Null}" Content="□" Foreground="White" Click="MinimizeButton_Click"/>
-                <Button Grid.Column="10" BorderBrush="{x:Null}" Background="{x:Null}" Content="_" Foreground="White" Click="HideButton_Click"/>
+                <Button Grid.Column="4" BorderBrush="{x:Null}" Background="{x:Null}" Content="-" Foreground="White" Click="OffsetMinusButton_Click" ToolTip="0.5초 느리게"/>
+                <Button Grid.Column="5" BorderBrush="{x:Null}" Background="{x:Null}" Content="+" Foreground="White" Click="OffsetPlusButton_Click" ToolTip="0.5초 빠르게" />
+                <Button Grid.Column="6" BorderBrush="{x:Null}" Background="{x:Null}" Content="↓" Foreground="White" Click="PreviousLyricsDataButton_Click" ToolTip="이전가사" />
+                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="↑" Foreground="White" Click="NextLyricsDataButon_Click" ToolTip="다음가사"/>
+                <Button Grid.Column="9" BorderBrush="{x:Null}" Background="{x:Null}" Content="□" Foreground="White" Click="MinimizeButton_Click" ToolTip="다음 곡 재생시 미니플레이어로 재생됩니다."/>
+                <Button Grid.Column="10" BorderBrush="{x:Null}" Background="{x:Null}" Content="_" Foreground="White" Click="HideButton_Click" ToolTip="숨기기"/>
             </Grid>
         </Grid>
     </Border>

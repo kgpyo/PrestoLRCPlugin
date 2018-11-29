@@ -109,7 +109,8 @@ namespace Presto.SWCamp.Lyrics
             //자동으로 가운데 정렬이 안되기 때무에 임시로 한칸 당김
             //일본어 가사인 경우 두칸 내려가면 가사가 안보이기때문에 한칸만 위로
             //MessageBox.Show(lyricsManager.GetLine(selectedIndex).ToString());
-            if (selectedIndex < lyricsList.Items.Count - 2 && lyricsManager.GetLine(selectedIndex) <= 2)
+            
+            if (selectedIndex < lyricsList.Items.Count - 2 && lyricsList.Items[selectedIndex].ToString().Split('\n').Length <= 2)
                 lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex + 1]);
             else
                 lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex]);
