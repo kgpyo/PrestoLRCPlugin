@@ -95,6 +95,16 @@ namespace Presto.SWCamp.Lyrics
                         break;
                 }
             }
+
+            //LRC 가사 포맷정보 담기
+            string infoData = "곡명: " + lyrics.Title + "(" + lyrics.Album + ")\n" +
+                    "작사가: " + lyrics.Author + "\n" +
+                    "가사 만든이: " + lyrics.By;
+            if(lyrics.Lines.ContainsKey(0) == true)
+            {
+                infoData += "\n" + lyrics.Lines[0];
+                lyrics.Lines.Remove(0);
+            }
             timeList = null;
             timeList = lyrics.Lines.Keys.ToList<double>();
         }
@@ -119,6 +129,7 @@ namespace Presto.SWCamp.Lyrics
             
             return LRCFormat.None;
         }
+
         public int GetCurrentLyricsIndex(double position)
         {
             int closeLyrics = -1;
@@ -128,6 +139,7 @@ namespace Presto.SWCamp.Lyrics
             if (closeLyrics >= 0) return -1;
             return Math.Max(0, ~closeLyrics - 1);
         }
+
         public string GetCurrentLyric(double position)
         {
             string preparing = "가사 준비중입니다.";
@@ -135,14 +147,7 @@ namespace Presto.SWCamp.Lyrics
             if (lyrics == null || lyrics.Lines.Count <= 0 || position < 0)
                 return preparing;
             int lyricsIndex = this.GetCurrentLyricsIndex(position);
-            if (lyricsIndex < 0)
-            {
-                string infoData = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
-                    "작사가: " + lyrics.Author + "\n" +
-                    "가사 만든이: " + lyrics.By;
-                return infoData;
-            }
-
+            if (lyricsIndex < 0) return preparing;
             return lyrics.Lines[timeList[lyricsIndex]];
         }
     }
