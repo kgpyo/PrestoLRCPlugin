@@ -31,7 +31,7 @@ namespace Presto.SWCamp.Lyrics
             PrestoSDK.PrestoService.Player.StreamChanged += Player_StreamChanged;
             this.Left = SystemParameters.WorkArea.Width - this.Width;
             this.Top = SystemParameters.WorkArea.Height - this.Height;
-
+            this.Topmost = true;
             lyricsManager = new LyricsManager();
             albumartManager = new AlbumartManager();
 
@@ -96,7 +96,6 @@ namespace Presto.SWCamp.Lyrics
             switch (PrestoSDK.PrestoService.Player.PlaybackState)
             {
                 case Common.PlaybackState.Playing:
-                  
                     PrestoSDK.PrestoService.Player.Pause();
                     break;
                 case Common.PlaybackState.Paused:
@@ -117,28 +116,6 @@ namespace Presto.SWCamp.Lyrics
         {
             this.Hide();
         }
-
-        /* 우상단 버튼 관리 
-        private void CloseButton_Click(object sender, RoutedEventArgs e)
-        {
-            this.Hide();
-        }
-
-        private void TopMostButton_Click(object sender, RoutedEventArgs e)
-        {
-            //항상 위에 표시 활성화
-            if (this.Topmost == false)
-            {
-                topMostButton.Color = (Color)ColorConverter.ConvertFromString("#000000");
-                this.Topmost = true;
-            }
-            else
-            {
-                topMostButton.Color = (Color)ColorConverter.ConvertFromString("#FF74C105");
-                this.Topmost = false;
-            }
-        }
-        */
 
     }
 }

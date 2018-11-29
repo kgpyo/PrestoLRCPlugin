@@ -102,13 +102,13 @@
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Column="0" Content="▲" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
-                <Button Grid.Column="1" Content="▼" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
-                <Button Grid.Column="2" Content="◀◀" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
-                <Button Grid.Column="3" Content="▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
-                <Button Grid.Column="4" Content="▶▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
-                <Button Grid.Column="5" Content="L" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
-                <Button Grid.Column="6" Content="R" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="0" Content="▲" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="VloumeUpButton_Click" />
+                <Button Grid.Column="1" Content="▼" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="VloumeDownButton_Click" />
+                <Button Grid.Column="2" Content="◀◀" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="PreviousButton_Click" />
+                <Button Grid.Column="3" Content="▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="PlayOrPauseButton_Click" />
+                <Button Grid.Column="4" Content="▶▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="NextButton_Click" />
+                <Button Grid.Column="5" Content="L" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="LoopButton_Click" />
+                <Button Grid.Column="6" Content="R" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="RandomButton_Click" />
             </Grid>
             <Grid Grid.Row="4">
                 <Grid.ColumnDefinitions>

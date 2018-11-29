@@ -73,7 +73,7 @@
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <Button Grid.Column="0" Content="◀◀" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="PrevButton_Click" Margin="0,-2,0,2"/>
-                    <Button Grid.Column="1" Content="&#11035; / &#10074;&#10074;" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="PlayOrPauseButton_Click" Margin="0,-2,0,2"/>
+                    <Button Grid.Column="1" Content="▶ / &#10074;&#10074;" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="PlayOrPauseButton_Click" Margin="0,-2,0,2"/>
                     <Button Grid.Column="2" Content="▶▶" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="NextButton_Click" Margin="0,-2,0,2"/>
 
                 </Grid>

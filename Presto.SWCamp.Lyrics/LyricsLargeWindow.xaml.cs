@@ -37,7 +37,7 @@ namespace Presto.SWCamp.Lyrics
 
             var timer = new DispatcherTimer
             {
-                Interval = TimeSpan.FromMilliseconds(300)
+                Interval = TimeSpan.FromMilliseconds(100)
             };
             timer.Tick += Timer_Tick;
             timer.Start();
@@ -112,6 +112,11 @@ namespace Presto.SWCamp.Lyrics
                     lyricsList.SelectedIndex = listBoxIndex;
                 }
             }
+            else
+            {
+                isAutoLyricsIndexChange = true;
+                lyricsList.SelectedIndex = 0;
+            }
 
         }
 
@@ -137,6 +142,78 @@ namespace Presto.SWCamp.Lyrics
             //사용자가 클릭하여 가사위치가 변경되었다면 구간 점프
             double position = lyricsManager.GetSelectPosition(selectedIndex);
             PrestoSDK.PrestoService.Player.Position = position;
+        }
+
+        private void PlayOrPauseButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch (PrestoSDK.PrestoService.Player.PlaybackState)
+            {
+                case Common.PlaybackState.Playing:
+                    PrestoSDK.PrestoService.Player.Pause();
+                    break;
+                case Common.PlaybackState.Paused:
+                    PrestoSDK.PrestoService.Player.Resume();
+                    break;
+                case Common.PlaybackState.Stopped:
+                    PrestoSDK.PrestoService.Player.Play();
+                    break;
+            }
+        }
+
+        private void PreviousButton_Click(object sender, RoutedEventArgs e)
+        {
+            PrestoSDK.PrestoService.Player.PlayPrevious();
+        }
+
+        private void NextButton_Click(object sender, RoutedEventArgs e)
+        {
+            PrestoSDK.PrestoService.Player.PlayNext();
+        }
+
+        private void VloumeDownButton_Click(object sender, RoutedEventArgs e)
+        {
+            float volume = PrestoSDK.PrestoService.Player.Volume;
+            if (volume > 0f)
+                volume -= 0.05f;
+            if (volume < 0) volume = 0f;
+            PrestoSDK.PrestoService.Player.Volume = volume;
+        }
+
+        private void VloumeUpButton_Click(object sender, RoutedEventArgs e)
+        {
+            float volume = PrestoSDK.PrestoService.Player.Volume;
+            if (volume < 1f)
+                volume += 0.05f;
+            if (volume > 1) volume = 1f;
+            PrestoSDK.PrestoService.Player.Volume = volume;
+        }
+
+        private void LoopButton_Click(object sender, RoutedEventArgs e)
+        {
+            switch(PrestoSDK.PrestoService.Player.RepeatMode)
+            {
+                case Common.RepeatMode.None:
+                    PrestoSDK.PrestoService.Player.RepeatMode = Common.RepeatMode.All;
+                    break;
+                case Common.RepeatMode.All:
+                    PrestoSDK.PrestoService.Player.RepeatMode = Common.RepeatMode.One;
+                    break;
+                case Common.RepeatMode.One:
+                    PrestoSDK.PrestoService.Player.RepeatMode = Common.RepeatMode.None;
+                    break; ;
+            }
+        }
+
+        private void RandomButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(PrestoSDK.PrestoService.Player.ShuffleMode == Common.ShuffleMode.None)
+            {
+                PrestoSDK.PrestoService.Player.ShuffleMode = Common.ShuffleMode.Random;
+            }
+            else
+            {
+                PrestoSDK.PrestoService.Player.ShuffleMode = Common.ShuffleMode.None;
+            }
         }
     }
 }
