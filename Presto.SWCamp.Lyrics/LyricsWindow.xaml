@@ -24,6 +24,7 @@
                         <ImageBrush ImageSource="noAlbumArt.JPG"/>
                     </StackPanel.Background>
                     <Image 
+                        x:Name="albumArtImage"
                         Source="{Binding Player.CurrentMusic.Album.Picture}" 
                         HorizontalAlignment="Left" 
                         VerticalAlignment="Top" />

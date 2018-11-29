@@ -28,10 +28,17 @@ namespace Presto.SWCamp.Lyrics
         {
             lyrics = null;//GCC
             lyrics = new Lyrics();
-            string artist = PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name;
-            string album = PrestoSDK.PrestoService.Player.CurrentMusic.Album.Name;
-            string bitrate = PrestoSDK.PrestoService.Player.CurrentMusic.Bitrate.ToString();
-            string title = PrestoSDK.PrestoService.Player.CurrentMusic.Title.ToString();
+            string artist = string.Empty;
+            string album = string.Empty;
+            string bitrate = string.Empty;
+            string title = string.Empty;
+            if (PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name != null)
+                artist = PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name;
+            if (PrestoSDK.PrestoService.Player.CurrentMusic.Album.Name != null)
+            album = PrestoSDK.PrestoService.Player.CurrentMusic.Album.Name;
+            if (PrestoSDK.PrestoService.Player.CurrentMusic.Title != null)
+                title = PrestoSDK.PrestoService.Player.CurrentMusic.Title.ToString();
+            bitrate = PrestoSDK.PrestoService.Player.CurrentMusic.Bitrate.ToString();
             try
             {
                 CurrentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
@@ -39,7 +46,13 @@ namespace Presto.SWCamp.Lyrics
                 string parentPath = Path.GetDirectoryName(CurrentMusic);
                 string path = Path.Combine(parentPath, lyricsFileName);
                 FileInfo file = new FileInfo(path);
-                if(file.Exists == true)
+                
+                if(title == string.Empty)
+                {
+                    title = Path.GetFileNameWithoutExtension(this.CurrentMusic);
+                    PrestoSDK.PrestoService.Player.CurrentMusic.Title = title;
+                }
+                if (file.Exists == true)
                 {
                     string[] lines = File.ReadAllLines(path, Encoding.Default);
                     this.LyricsParsing(lines);
@@ -53,8 +66,8 @@ namespace Presto.SWCamp.Lyrics
             }
             catch
             {
-                if (artist == null) artist = lyrics.Artist;
-                if (album == null) album = lyrics.Album;
+                if (artist == string.Empty) artist = lyrics.Artist;
+                if (album == string.Empty) album = lyrics.Album;
                 lyrics.Lines.Add(0,artist + "/" + album + "/" + bitrate + "kbps"
                     + "\n가사를 불러올 수 없습니다.");
             }

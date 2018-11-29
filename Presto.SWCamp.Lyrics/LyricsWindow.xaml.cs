@@ -23,6 +23,8 @@ namespace Presto.SWCamp.Lyrics
     public partial class LyricsWindow : Window
     {
         LyricsManager lyricsManager;
+        AlbumartManager albumartManager;
+        
         public LyricsWindow()
         {
             InitializeComponent();
@@ -31,6 +33,7 @@ namespace Presto.SWCamp.Lyrics
             this.Top = SystemParameters.WorkArea.Height - this.Height;
 
             lyricsManager = new LyricsManager();
+            albumartManager = new AlbumartManager();
 
             var timer = new DispatcherTimer
             {
@@ -44,16 +47,37 @@ namespace Presto.SWCamp.Lyrics
         {
             this.Show();
             lyricsManager.StreamChanged();
-            
             //GC 강제 실행
             System.GC.Collect(2, GCCollectionMode.Forced);
-            System.GC.WaitForFullGCComplete();
+            System.GC.WaitForFullGCComplete();            
 
-            if (PrestoSDK.PrestoService.Player.CurrentMusic.Title == null)
+            bool check = false;
+            if (PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture == null)
             {
-                string fileName = Path.GetFileNameWithoutExtension(lyricsManager.CurrentMusic);
-                PrestoSDK.PrestoService.Player.CurrentMusic.Title = fileName;
+                if (PrestoSDK.PrestoService.Player.CurrentMusic.Title != null)
+                {
+                    string path = string.Empty;
+                    if(PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name == null)
+                    {
+                        path = albumartManager.Run(PrestoSDK.PrestoService.Player.CurrentMusic.Title);
+                    }
+                    else
+                    {
+                        path = albumartManager.Run(PrestoSDK.PrestoService.Player.CurrentMusic.Title + " " + PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name);
+                    }
+                    if (!(path == null || path == string.Empty))
+                    {
+                        check = true;
+                        albumArtImage.Source = new BitmapImage(new Uri(path));
+                    }
+                }
+            } else
+            {
+                check = true;
+                albumArtImage.Source = new BitmapImage(new Uri(PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture));
             }
+            if (!check)
+                albumArtImage.Source = null;
         }
         
         private void Timer_Tick(object sender, EventArgs e)

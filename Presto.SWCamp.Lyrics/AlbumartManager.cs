@@ -1,5 +1,4 @@
-﻿using Presto.SDK;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -10,29 +9,35 @@ namespace Presto.SWCamp.Lyrics
 {
     class AlbumartManager
     {
-        public void Run()
+        public string Run(string keyword)
         {
             const string searchUrl = "http://www.maniadb.com/api/search/{0}/?sr=song&display=1&key=gyeongpoy@naver.com&v=0.5";
-            string keyword = Console.ReadLine();
             string search = String.Format(searchUrl, keyword);
-            bool check = false;
-            using (XmlTextReader reader = new XmlTextReader(search))
+
+            try
             {
-                while (reader.Read())
+                using (XmlTextReader reader = new XmlTextReader(search))
                 {
-                    if (reader.IsStartElement())
+                    while (reader.Read())
                     {
-                        if (reader.Name == "image")
+                        if (reader.IsStartElement())
                         {
-                            string id = reader["image"];
-                            check = true;
-                            reader.Read();
-                            //new BitmapImage(new Uri(reader.Value));
-                            break;
+                            if (reader.Name == "image")
+                            {
+                                string id = reader["image"];
+                                reader.Read();
+                                return reader.Value.ToString();
+                            }
                         }
                     }
                 }
             }
+            catch
+            {
+
+            }
+
+            return "null";
         }
     }
 }
