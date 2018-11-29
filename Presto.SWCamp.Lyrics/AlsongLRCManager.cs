@@ -36,9 +36,9 @@ namespace Presto.SWCamp.Lyrics
             data.Append("</SOAP-ENV:Body>");
             data.Append("</SOAP-ENV:Envelope>");
         }
-        public string GetLRCData(string title, string artist)
+        public string GetLRCData(string title, string artist, int index)
         {
-            return HtmlParsingToLRC(RequestLRCToAlsong(title, artist));
+            return HtmlParsingToLRC(RequestLRCToAlsong(title, artist), index);
         }
         public string RequestLRCToAlsong(string title, string artist)
         {
@@ -66,13 +66,15 @@ namespace Presto.SWCamp.Lyrics
 
         }
 
-        public string HtmlParsingToLRC(string data)
+        public string HtmlParsingToLRC(string data, int index)
         {
             XmlDocument xml = new XmlDocument();
             xml.LoadXml(data);
             XmlNodeList xmlList = xml.GetElementsByTagName("ST_GET_RESEMBLELYRIC2_RETURN");
 
-            string x = xmlList[0]["strLyric"].InnerText; // xmlList상태로 변경하려니 인터넷 자료는 커녕 MS사에도 없길래 
+            if (xmlList.Count <= index) return "[00:00.00]데이터가 존재하지 않습니다";
+
+            string x = xmlList[index]["strLyric"].InnerText; // xmlList상태로 변경하려니 인터넷 자료는 커녕 MS사에도 없길래 
             x = x.Replace("<br>", "\n");          // string 을만들어서 때려박아서 수정
 
             StringBuilder resultData = new StringBuilder();

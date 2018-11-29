@@ -33,6 +33,7 @@ namespace Presto.SWCamp.Lyrics
             this.Top = SystemParameters.WorkArea.Height - this.Height;
             this.Topmost = true;
             albumartManager = new AlbumartManager();
+            _lyricsLarge = new LyricsLargeWindow();
 
         }
 
@@ -42,47 +43,14 @@ namespace Presto.SWCamp.Lyrics
             System.GC.Collect(2, GCCollectionMode.Forced);
             System.GC.WaitForFullGCComplete();
 
-            if (IsThisWindowShow == true || _lyricsLarge.IsActive == false)
+            if (IsThisWindowShow == true || _lyricsLarge.IsThisWindowShow == false)
             {
                 this.IsThisWindowShow = true;
                 this.Show();
+                albumartManager.AlbumArtSearch();
+                albumArtImage.ImageSource = albumartManager.AlbumArtImageSource;
+                _lyricsLarge.SetAlbumArtImage(albumartManager.AlbumArtImageSource);
             }
-
-            bool isCorrectSearchAlbumArt = false;
-            if (PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture == null)
-            {
-                string title = string.Empty;
-                title = PrestoSDK.PrestoService.Player.CurrentMusic.Title;
-                if (title == null)
-                {
-                    string CurrentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
-                    title = Path.GetFileNameWithoutExtension(CurrentMusic);
-                    PrestoSDK.PrestoService.Player.CurrentMusic.Title = title;
-                }
-                if(title != string.Empty)
-                { 
-                    string path = string.Empty;
-                    if(PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name == null)
-                    {
-                        path = albumartManager.Run(PrestoSDK.PrestoService.Player.CurrentMusic.Title);
-                    }
-                    else
-                    {
-                        path = albumartManager.Run(PrestoSDK.PrestoService.Player.CurrentMusic.Title + " " + PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name);
-                    }
-                    if (!(path == null || path == string.Empty))
-                    {
-                        isCorrectSearchAlbumArt = true;
-                        albumArtImage.ImageSource = new BitmapImage(new Uri(path));
-                    }
-                }
-            } else
-            {
-                isCorrectSearchAlbumArt = true;
-                albumArtImage.ImageSource = new BitmapImage(new Uri(PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture));
-            }
-            if (!isCorrectSearchAlbumArt)
-                albumArtImage.ImageSource = null;
         }
 
         /* 창 드래그 */
@@ -123,7 +91,6 @@ namespace Presto.SWCamp.Lyrics
         {
             this.Hide();
             IsThisWindowShow = false;
-            _lyricsLarge = new LyricsLargeWindow();
             _lyricsLarge.IsThisWindowShow = true;
             _lyricsLarge.Show();
         }

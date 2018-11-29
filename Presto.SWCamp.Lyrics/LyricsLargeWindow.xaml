@@ -21,17 +21,17 @@
                 <RowDefinition Height="10" />
             </Grid.RowDefinitions>
 
-            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="15" Opacity="0.5">
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="15" Opacity="0.3">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="noAlbumArt.JPG"  Stretch="UniformToFill"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle Grid.Column="0" Grid.RowSpan="7" Height="300" RadiusX="15" RadiusY="15" Margin="0,0,0,-4" Opacity="0.7">
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" Height="300" Width="295" RadiusX="20" RadiusY="20" Margin="0,0,0,0" Opacity="0.7">
                 <Rectangle.Fill>
                     <ImageBrush  x:Name="albumArtImage" ImageSource="{Binding Player.CurrentMusic.Album.Picture}" Stretch="UniformToFill"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="20" Opacity="0.4">
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="15" Opacity="0.6">
                 <Rectangle.Fill>
                     <SolidColorBrush Color="Black"/>
                 </Rectangle.Fill>
@@ -105,7 +105,7 @@
                 <Button Grid.Column="0" Content="▲" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="VloumeUpButton_Click" />
                 <Button Grid.Column="1" Content="▼" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="VloumeDownButton_Click" />
                 <Button Grid.Column="2" Content="◀◀" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="PreviousButton_Click" />
-                <Button Grid.Column="3" Content="▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="PlayOrPauseButton_Click" />
+                <Button Grid.Column="3" Content="▶ / &#10074;&#10074;" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="PlayOrPauseButton_Click" />
                 <Button Grid.Column="4" Content="▶▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="NextButton_Click" />
                 <Button Grid.Column="5" Content="L" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="LoopButton_Click" />
                 <Button Grid.Column="6" Content="R" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" Click="RandomButton_Click" />
@@ -129,8 +129,10 @@
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="8" />
                     <ColumnDefinition Width="30" />
-                    <ColumnDefinition Width="50" />
                     <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="20" />
                     <ColumnDefinition Width="20" />
@@ -143,8 +145,10 @@
                 <TextBlock Grid.Column="3" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" Text="ms"/>
                 <Button Grid.Column="4" BorderBrush="{x:Null}" Background="{x:Null}" Content="-" Foreground="White" Click="OffsetMinusButton_Click"/>
                 <Button Grid.Column="5" BorderBrush="{x:Null}" Background="{x:Null}" Content="+" Foreground="White" Click="OffsetPlusButton_Click" />
-                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="□" Foreground="White" Click="MinimizeButton_Click"/>
-                <Button Grid.Column="8" BorderBrush="{x:Null}" Background="{x:Null}" Content="_" Foreground="White" Click="HideButton_Click"/>
+                <Button Grid.Column="6" BorderBrush="{x:Null}" Background="{x:Null}" Content="↓" Foreground="White" Click="PreviousLyricsDataButton_Click" />
+                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="↑" Foreground="White" Click="NextLyricsDataButon_Click" />
+                <Button Grid.Column="9" BorderBrush="{x:Null}" Background="{x:Null}" Content="□" Foreground="White" Click="MinimizeButton_Click"/>
+                <Button Grid.Column="10" BorderBrush="{x:Null}" Background="{x:Null}" Content="_" Foreground="White" Click="HideButton_Click"/>
             </Grid>
         </Grid>
     </Border>

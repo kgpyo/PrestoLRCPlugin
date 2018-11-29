@@ -22,7 +22,8 @@ namespace Presto.SWCamp.Lyrics
         private AlsongLRCManager alsongLRCManager = new AlsongLRCManager();
         private Lyrics lyrics;
         private List<double> timeList = null; // 이진탐색을 위해 사용하는 리스트
-        public string CurrentMusic { get; set; } = null;        
+        public string CurrentMusic { get; set; } = null;
+        public int LyricsListIndex { get; set; } = 0;
         
             
         public void StreamChanged()
@@ -53,14 +54,14 @@ namespace Presto.SWCamp.Lyrics
                     title = Path.GetFileNameWithoutExtension(this.CurrentMusic);
                     PrestoSDK.PrestoService.Player.CurrentMusic.Title = title;
                 }
-                if (file.Exists == true)
+                if (file.Exists == true && this.LyricsListIndex == 0)
                 {
                     string[] lines = File.ReadAllLines(path, Encoding.Default);
                     this.LyricsParsing(lines);
                 }
                 else
                 {
-                    string lrcData = alsongLRCManager.GetLRCData(title, artist);
+                    string lrcData = alsongLRCManager.GetLRCData(title, artist, LyricsListIndex);
                     string[] lines = lrcData.Split('\n');
                     this.LyricsParsing(lines);
                 }
@@ -107,12 +108,13 @@ namespace Presto.SWCamp.Lyrics
                             lyricsData = lyrics.Lines[time] + "\n" + lyricsData;
                             lyrics.Lines.Remove(time);
                         }
+                        if (lyricsData == string.Empty) break;
                         lyrics.Lines.Add(time, lyricsData);
                         
                         break;
                     //텍스트만 존재할경우 이전가사와 합침
                     case LRCFormat.None:
-                        if (lyrics.Lines.Count <= 0 || data == "") break;
+                        if (lyrics.Lines.Count <= 0 || data.Trim() == string.Empty) break;
                         if (lyrics.Lines.ContainsKey(time) != true) break;
                         string newData = lyrics.Lines[time] + "\n" + data;
                         lyrics.Lines.Remove(time);
@@ -156,6 +158,8 @@ namespace Presto.SWCamp.Lyrics
 
         public int GetCurrentLyricsIndex(double position)
         {
+            if (this.lyrics == null) return 0;
+
             int closeLyrics = -1;
 
             // 사용자가 지정한 오프셋을 더해서 가사 위치찾기
@@ -188,17 +192,33 @@ namespace Presto.SWCamp.Lyrics
 
         public SortedDictionary<double, string> GetLyricsData()
         {
-            return this.lyrics.Lines;
+            if (this.lyrics != null)
+                return this.lyrics.Lines;
+            else return new SortedDictionary<double, string>();
         }
 
         public void SetOffset(double offset)
         {
+            if (this.lyrics == null) return;
             this.lyrics.Offset += offset;
         }
 
         public double GetOffset()
         {
+            if (this.lyrics == null) return 0;
             return this.lyrics.Offset;
+        }
+
+        //현재 가사의 출력 라인수
+        public int GetLine(int index)
+        {
+            if (this.lyrics == null) return 0;
+            double position = this.timeList[index] - this.lyrics.Offset;
+            if (position < 0)
+                position = 0;
+            if (position > PrestoSDK.PrestoService.Player.Length)
+                position = PrestoSDK.PrestoService.Player.Length - 1;
+            return this.lyrics.Lines[position].Split('\n').Length;
         }
     }
 }
