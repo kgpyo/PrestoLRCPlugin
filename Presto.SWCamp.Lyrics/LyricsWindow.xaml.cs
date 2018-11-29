@@ -24,7 +24,7 @@ namespace Presto.SWCamp.Lyrics
     {
         LyricsManager lyricsManager;
         AlbumartManager albumartManager;
-        
+        private bool isShow = false;
         public LyricsWindow()
         {
             InitializeComponent();
@@ -35,12 +35,6 @@ namespace Presto.SWCamp.Lyrics
             lyricsManager = new LyricsManager();
             albumartManager = new AlbumartManager();
 
-            var timer = new DispatcherTimer
-            {
-                Interval = TimeSpan.FromMilliseconds(300)
-            };
-            timer.Tick += Timer_Tick;
-            timer.Start();
         }
 
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)

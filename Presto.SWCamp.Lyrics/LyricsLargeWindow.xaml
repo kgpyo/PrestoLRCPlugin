@@ -37,22 +37,62 @@
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Player.CurrentMusic.Title}" FontWeight="Bold" Height="auto" Width="auto" TextAlignment="Center" />
-            <Grid Grid.Row="4">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="20" />
-                    <ColumnDefinition Width="*" />
-                    <ColumnDefinition Width="20" />
-                </Grid.ColumnDefinitions>
-                <ProgressBar Grid.Column="1" Width="auto" Height="3" Maximum="{Binding Player.Length}" Value="{Binding Player.Position}" BorderBrush="{x:Null}">
-                    <ProgressBar.Foreground>
-                        <SolidColorBrush Color="White" Opacity="0.5"/>
-                    </ProgressBar.Foreground>
-                    <ProgressBar.Background>
-                        <SolidColorBrush Color="Black" Opacity="0.5"/>
-                    </ProgressBar.Background>
-                </ProgressBar>
-            </Grid>
-            <Grid Grid.Row="3" Opacity="0.5">
+            <ListBox Grid.Row="2" x:Name="lyricsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="LyricsList_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}">
+                    <ListBox.Resources>
+                        <Style TargetType="{x:Type ListBoxItem}">
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                                        <Border x:Name="Bd"
+                                                BorderBrush="{TemplateBinding BorderBrush}"
+                                                BorderThickness="{TemplateBinding BorderThickness}"
+                                                Background="{TemplateBinding Background}"
+                                                Padding="{TemplateBinding Padding}"
+                                                SnapsToDevicePixels="true">
+                                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                                              SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"
+                                                              VerticalAlignment="{TemplateBinding VerticalContentAlignment}" />
+                                        </Border>
+                                        <ControlTemplate.Triggers>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="Selector.IsSelectionActive" Value="False" />
+                                                    <Condition Property="IsSelected" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" >
+                                                <Setter.Value>
+                                                    <SolidColorBrush Color="White" Opacity="0.3"/>
+                                                </Setter.Value>
+                                            </Setter>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </MultiTrigger>
+                                            <MultiTrigger>
+                                                <MultiTrigger.Conditions>
+                                                    <Condition Property="Selector.IsSelectionActive" Value="True" />
+                                                    <Condition Property="IsSelected" Value="True" />
+                                                </MultiTrigger.Conditions>
+                                                <Setter Property="Background" >
+                                                    <Setter.Value>
+                                                        <SolidColorBrush Color="White" Opacity="0.3"/>
+                                                    </Setter.Value>
+                                                </Setter>
+                                            <Setter Property="FontWeight" Value="Bold"/>
+                                        </MultiTrigger>
+                                        </ControlTemplate.Triggers>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                        </Style>
+                    </ListBox.Resources>
+                    <ListBox.ItemTemplate>
+                        <DataTemplate>
+                            <StackPanel>
+                                <TextBlock Text="{Binding Value}" TextWrapping="Wrap" Foreground="White"/>
+                            </StackPanel>
+                        </DataTemplate>
+                    </ListBox.ItemTemplate>
+                </ListBox>
+                <Grid Grid.Row="3" Opacity="0.5">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="*"/>
@@ -69,6 +109,21 @@
                 <Button Grid.Column="4" Content="▶▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
                 <Button Grid.Column="5" Content="L" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
                 <Button Grid.Column="6" Content="R" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+            </Grid>
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <ProgressBar Grid.Column="1" Width="auto" Height="3" Maximum="{Binding Player.Length}" Value="{Binding Player.Position}" BorderBrush="{x:Null}">
+                    <ProgressBar.Foreground>
+                        <SolidColorBrush Color="White" Opacity="0.5"/>
+                    </ProgressBar.Foreground>
+                    <ProgressBar.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.5"/>
+                    </ProgressBar.Background>
+                </ProgressBar>
             </Grid>
             <Grid Grid.Row="0">
                 <Grid.ColumnDefinitions>

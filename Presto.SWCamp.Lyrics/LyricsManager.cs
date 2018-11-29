@@ -175,5 +175,15 @@ namespace Presto.SWCamp.Lyrics
             if (lyricsIndex < 0) return preparing;
             return lyrics.Lines[timeList[lyricsIndex]];
         }
+
+        public double GetSelectPosition(int index)
+        {
+            return this.timeList[index];
+        }
+
+        public SortedDictionary<double, string> GetLyricsData()
+        {
+            return this.lyrics.Lines;
+        }
     }
 }
