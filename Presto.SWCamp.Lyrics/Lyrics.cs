@@ -11,7 +11,7 @@ namespace Presto.SWCamp.Lyrics
     {
         //list -> sortedDictonary 변경
         public SortedDictionary<double, string> Lines = new SortedDictionary<double, string>();    //가사 데이터
-        public int Sync { get; set; }                       //싱크 데이터
+        public double Offset { get; set; }                  //싱크조절
         public string Title { get; set; } = "정보없음";     //제목
         public string Artist { get; set; } = "정보없음";    //가수
         public string Album { get; set; } = "정보없음";     //앨범

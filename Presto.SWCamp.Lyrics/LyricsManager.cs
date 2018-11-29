@@ -145,7 +145,8 @@ namespace Presto.SWCamp.Lyrics
         {
             int closeLyrics = -1;
 
-            closeLyrics = timeList.BinarySearch(position);
+            // 사용자가 지정한 오프셋을 더해서 가사 위치찾기
+            closeLyrics = timeList.BinarySearch(position + lyrics.Offset);
 
             if (closeLyrics >= 0) return -1;
             return Math.Max(0, ~closeLyrics - 1);
