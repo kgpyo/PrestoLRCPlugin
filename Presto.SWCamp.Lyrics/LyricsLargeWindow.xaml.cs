@@ -23,7 +23,7 @@ namespace Presto.SWCamp.Lyrics
     {
         LyricsManager lyricsManager;
         AlbumartManager albumartManager;
-        private bool isThisWindowShow = false;
+        public bool IsThisWindowShow { get; set;  } = false;
         private bool isAutoLyricsIndexChange = false;
 
         public LyricsLargeWindow()
@@ -34,6 +34,7 @@ namespace Presto.SWCamp.Lyrics
             this.Top = SystemParameters.WorkArea.Height - this.Height;
             lyricsManager = new LyricsManager();
             albumartManager = new AlbumartManager();
+            this.PlayerGetLyrics();
 
             var timer = new DispatcherTimer
             {
@@ -41,16 +42,25 @@ namespace Presto.SWCamp.Lyrics
             };
             timer.Tick += Timer_Tick;
             timer.Start();
+
         }
 
         // 재생중인 음악이 바뀌면
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
+            this.PlayerGetLyrics();
+        }
+
+        private void PlayerGetLyrics()
+        {
             // 큰 플레이어가 실행중이고, 숨겨진 상태라면
-            if (isThisWindowShow == true)
+            if (IsThisWindowShow == true)
             {
                 this.Show();
             }
+
+            if (PrestoSDK.PrestoService.Player.PlaybackState != Common.PlaybackState.Playing)
+                return;
 
             // 현재 바뀐 음악에 대한 가사 처리
             lyricsManager.StreamChanged();
@@ -92,11 +102,12 @@ namespace Presto.SWCamp.Lyrics
             //GC 강제 실행 (메모리 부분)
             System.GC.Collect(2, GCCollectionMode.Forced);
             System.GC.WaitForFullGCComplete();
-
         }
 
         private void Timer_Tick(object sender, EventArgs e)
         {
+            if (lyricsManager == null) return;
+
             double cur = PrestoSDK.PrestoService.Player.Position;
 
             // 재생중일때만 가사 위치 변경, 오프셋 반영
@@ -235,8 +246,8 @@ namespace Presto.SWCamp.Lyrics
 
         private void MinimizeButton_Click(object sender, RoutedEventArgs e)
         {
-            this.Hide();
-            isThisWindowShow = false;
+            IsThisWindowShow = false;
+            this.Close();
         }
 
         private void OffsetMinusButton_Click(object sender, RoutedEventArgs e)
@@ -249,5 +260,6 @@ namespace Presto.SWCamp.Lyrics
         {
             lyricsManager.SetOffset(500);
         }
+        
     }
 }

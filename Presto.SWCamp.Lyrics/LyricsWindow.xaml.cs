@@ -22,9 +22,9 @@ namespace Presto.SWCamp.Lyrics
     /// </summary>
     public partial class LyricsWindow : Window
     {
-        LyricsManager lyricsManager;
         AlbumartManager albumartManager;
-        private bool isShow = false;
+        private LyricsLargeWindow _lyricsLarge = null;
+        public bool IsThisWindowShow { get; set; } = false;
         public LyricsWindow()
         {
             InitializeComponent();
@@ -32,24 +32,35 @@ namespace Presto.SWCamp.Lyrics
             this.Left = SystemParameters.WorkArea.Width - this.Width;
             this.Top = SystemParameters.WorkArea.Height - this.Height;
             this.Topmost = true;
-            lyricsManager = new LyricsManager();
             albumartManager = new AlbumartManager();
 
         }
 
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
-            this.Show();
-            lyricsManager.StreamChanged();
             //GC 강제 실행
             System.GC.Collect(2, GCCollectionMode.Forced);
-            System.GC.WaitForFullGCComplete();            
+            System.GC.WaitForFullGCComplete();
 
-            bool check = false;
+            if (IsThisWindowShow == true || _lyricsLarge.IsActive == false)
+            {
+                this.IsThisWindowShow = true;
+                this.Show();
+            }
+
+            bool isCorrectSearchAlbumArt = false;
             if (PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture == null)
             {
-                if (PrestoSDK.PrestoService.Player.CurrentMusic.Title != null)
+                string title = string.Empty;
+                title = PrestoSDK.PrestoService.Player.CurrentMusic.Title;
+                if (title == null)
                 {
+                    string CurrentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
+                    title = Path.GetFileNameWithoutExtension(CurrentMusic);
+                    PrestoSDK.PrestoService.Player.CurrentMusic.Title = title;
+                }
+                if(title != string.Empty)
+                { 
                     string path = string.Empty;
                     if(PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name == null)
                     {
@@ -61,27 +72,23 @@ namespace Presto.SWCamp.Lyrics
                     }
                     if (!(path == null || path == string.Empty))
                     {
-                        check = true;
+                        isCorrectSearchAlbumArt = true;
                         albumArtImage.ImageSource = new BitmapImage(new Uri(path));
                     }
                 }
             } else
             {
-                check = true;
+                isCorrectSearchAlbumArt = true;
                 albumArtImage.ImageSource = new BitmapImage(new Uri(PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture));
             }
-            if (!check)
+            if (!isCorrectSearchAlbumArt)
                 albumArtImage.ImageSource = null;
-        }
-        
-        private void Timer_Tick(object sender, EventArgs e)
-        {
-            double cur = PrestoSDK.PrestoService.Player.Position;
         }
 
         /* 창 드래그 */
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
         {
+            
             if (e.RightButton != MouseButtonState.Pressed) DragMove();
         }
 
@@ -115,6 +122,10 @@ namespace Presto.SWCamp.Lyrics
         private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
         {
             this.Hide();
+            IsThisWindowShow = false;
+            _lyricsLarge = new LyricsLargeWindow();
+            _lyricsLarge.IsThisWindowShow = true;
+            _lyricsLarge.Show();
         }
 
     }
