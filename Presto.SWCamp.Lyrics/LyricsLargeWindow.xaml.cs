@@ -61,6 +61,7 @@ namespace Presto.SWCamp.Lyrics
 
             isAutoLyricsIndexChange = true;
             lyricsList.SelectedIndex = 0;
+            lyricsList.ScrollIntoView(lyricsList.Items[0]);
         }
 
         public void SetAlbumArtImage(BitmapImage AlbumArtImageSource)
@@ -114,7 +115,6 @@ namespace Presto.SWCamp.Lyrics
                 lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex + 1]);
             else
                 lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex]);
-            lyricsList.Focus();
 
 
             if (isAutoLyricsIndexChange == true)

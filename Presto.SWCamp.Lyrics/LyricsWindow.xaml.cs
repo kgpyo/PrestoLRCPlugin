@@ -47,10 +47,10 @@ namespace Presto.SWCamp.Lyrics
             {
                 this.IsThisWindowShow = true;
                 this.Show();
-                albumartManager.AlbumArtSearch();
-                albumArtImage.ImageSource = albumartManager.AlbumArtImageSource;
-                _lyricsLarge.SetAlbumArtImage(albumartManager.AlbumArtImageSource);
             }
+            albumartManager.AlbumArtSearch();
+            albumArtImage.ImageSource = albumartManager.AlbumArtImageSource;
+            _lyricsLarge.SetAlbumArtImage(albumartManager.AlbumArtImageSource);
         }
 
         /* 창 드래그 */
