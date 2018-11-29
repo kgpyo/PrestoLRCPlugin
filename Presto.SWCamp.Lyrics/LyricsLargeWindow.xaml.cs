@@ -34,7 +34,7 @@ namespace Presto.SWCamp.Lyrics
             this.Top = SystemParameters.WorkArea.Height - this.Height;
             lyricsManager = new LyricsManager();
             albumartManager = new AlbumartManager();
-            
+
             var timer = new DispatcherTimer
             {
                 Interval = TimeSpan.FromMilliseconds(300)
@@ -47,7 +47,7 @@ namespace Presto.SWCamp.Lyrics
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
             // 큰 플레이어가 실행중이고, 숨겨진 상태라면
-            if(isThisWindowShow == true)
+            if (isThisWindowShow == true)
             {
                 this.Show();
             }
@@ -59,7 +59,35 @@ namespace Presto.SWCamp.Lyrics
             lyricsList.ItemsSource = lyricsManager.GetLyricsData();
 
             // 해당 음악에 앨범아트 존재하지 않으면 검색하여 출력
-            
+            bool isCorrectSearchAlbumArt = false;
+            if (PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture == null)
+            {
+                if (PrestoSDK.PrestoService.Player.CurrentMusic.Title != null)
+                {
+                    string path = string.Empty;
+                    if (PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name == null)
+                    {
+                        path = albumartManager.Run(PrestoSDK.PrestoService.Player.CurrentMusic.Title);
+                    }
+                    else
+                    {
+                        path = albumartManager.Run(PrestoSDK.PrestoService.Player.CurrentMusic.Title + " " + PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name);
+                    }
+                    if (!(path == null || path == string.Empty))
+                    {
+                        isCorrectSearchAlbumArt = true;
+                        albumArtImage.ImageSource = new BitmapImage(new Uri(path));
+                    }
+                }
+            }
+            else
+            {
+                isCorrectSearchAlbumArt = true;
+                albumArtImage.ImageSource = new BitmapImage(new Uri(PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture));
+            }
+            if (!isCorrectSearchAlbumArt)
+                albumArtImage.ImageSource = null;
+
 
             //GC 강제 실행 (메모리 부분)
             System.GC.Collect(2, GCCollectionMode.Forced);
@@ -77,14 +105,14 @@ namespace Presto.SWCamp.Lyrics
                 int listBoxIndex = lyricsManager.GetCurrentLyricsIndex(cur);
                 // 유효한 범위가 아니라면 종료
                 if (listBoxIndex < 0) return;
-                if(lyricsList.SelectedIndex != listBoxIndex)
+                if (lyricsList.SelectedIndex != listBoxIndex)
                 {
                     //Timer에 의해 ListBox Item이 변경되었으므로
                     isAutoLyricsIndexChange = true;
                     lyricsList.SelectedIndex = listBoxIndex;
                 }
             }
-            
+
         }
 
         private void Window_MouseDown(object sender, MouseButtonEventArgs e)
@@ -98,9 +126,9 @@ namespace Presto.SWCamp.Lyrics
 
             //자동 스크롤
             lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex]);
-            
 
-            if(isAutoLyricsIndexChange == true)
+
+            if (isAutoLyricsIndexChange == true)
             {
                 isAutoLyricsIndexChange = false;
                 return;
