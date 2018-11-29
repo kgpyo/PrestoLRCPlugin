@@ -46,6 +46,7 @@ namespace Presto.SWCamp.Lyrics
                 lyrics.Lines.Add(0,artist + "/" + album + "/" + bitrate + "kbps"
                     + "\n가사를 불러올 수 없습니다.");
             }
+            timeList = lyrics.Lines.Keys.ToList<double>();
         }
 
         // 포맷 파싱
@@ -105,8 +106,6 @@ namespace Presto.SWCamp.Lyrics
                 infoData += "\n" + lyrics.Lines[0];
                 lyrics.Lines.Remove(0);
             }
-            timeList = null;
-            timeList = lyrics.Lines.Keys.ToList<double>();
         }
 
         //해당 데이터가 어떤 데이터인지 판별
