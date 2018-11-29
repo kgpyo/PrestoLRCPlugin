@@ -162,16 +162,24 @@ namespace Presto.SWCamp.Lyrics
                 return str;
             }
 
-            if (mid < lyrics.Lines.Count-1)
+            
+            if(mid == 0) //가사 첫줄 시작의경우
+            {
+                str[0] = lyrics.Lines[closeLyrics].Value;
+                str[1] = lyrics.Lines[mid + 1].Value;
+                str[3] = "4";
+                return str;
+            }
+            else if (mid < lyrics.Lines.Count-1) //일반 세줄 가사 출력
             {
                 str[0] = lyrics.Lines[mid - 1].Value;
                 str[1] = lyrics.Lines[closeLyrics].Value;
-                str[2] = lyrics.Lines[mid - 1].Value;
+                str[2] = lyrics.Lines[mid + 1].Value;
                 str[3] = "3";
                 return str; 
                 
             }
-            else
+            else //마지막 가사 출력
             {
                 str[0] = lyrics.Lines[mid - 1].Value;
                 str[1] = lyrics.Lines[closeLyrics].Value;

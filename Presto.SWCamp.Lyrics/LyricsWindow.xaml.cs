@@ -62,18 +62,15 @@ namespace Presto.SWCamp.Lyrics
             
             double cur = PrestoSDK.PrestoService.Player.Position;
             str[0] = "";
-           
-            ///string str = lyricsManager.GetCurrentLyric(cur);
-            ///string str2 = lyricsManager.GetCurrentLyric(cur)[0];
             str = lyricsManager.GetCurrentLyric(cur);
+
             if (str[0] == "가사 준비중입니다.")
             {
                 textLyrics.Text = str[0];
             }
             else if(str[3] == "1")
             {
-                ///textLyrics.Text = lyricsManager.GetCurrentLyric(cur);
-                string[] arr = str[0].Split('\n');
+                string[] arr = str[0].Split('\n'); //곡 정보를 스플릿 하여 배열에 저장
                 textLyrics.Inlines.Clear();
                 textLyrics.Inlines.Add(new Run { Text = arr[0] + "\n" });
                 textLyrics.Inlines.Add(new Run { Text = arr[1] + "\n" });
@@ -91,6 +88,12 @@ namespace Presto.SWCamp.Lyrics
                 textLyrics.Inlines.Add(new Run { Text = str[0] + "\n" });
                 textLyrics.Inlines.Add(new Run { Text = str[1] + "\n", FontWeight = FontWeights.Bold });
                 textLyrics.Inlines.Add(new Run { Text = str[2]});
+            }
+            else if(str[3] == "4")
+            {
+                textLyrics.Inlines.Clear();
+                textLyrics.Inlines.Add(new Run { Text = str[0] + "\n", FontWeight = FontWeights.Bold });
+                textLyrics.Inlines.Add(new Run { Text = str[1]});
             }
 
             
