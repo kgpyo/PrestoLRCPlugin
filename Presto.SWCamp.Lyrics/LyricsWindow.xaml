@@ -11,26 +11,10 @@
     DataContext="{x:Static ps:PrestoSDK.PrestoService}"
     MouseLeftButtonDown="Window_MouseDown"
     MouseDoubleClick="Window_MouseDoubleClick"
-    WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" AllowsTransparency="True" Background="{x:Null}">
+    WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" AllowsTransparency="True" Background="{x:Null}" ToolTip="더블 클릭하면 가사창이 출력됩니다.">
     <Border  BorderThickness="1.5"
              CornerRadius="10" Background="#FFE1DCD9">
         <Grid>
-<!--
-                <StackPanel Width="100" Height="100" HorizontalAlignment="Left" Margin="3">
-                    <StackPanel.Background>
-                        <ImageBrush ImageSource="noAlbumArt.JPG"/>
-                    </StackPanel.Background>
-                    <Image 
-                        x:Name="albumArtImage"
-                        Source="{Binding Player.CurrentMusic.Album.Picture}" 
-                        HorizontalAlignment="Left" 
-                        VerticalAlignment="Top" />
-                </StackPanel>
-                <Label x:Name="playStatus" Content="" HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Width="100" Height="100" HorizontalContentAlignment="Center" VerticalContentAlignment="Center" FontSize="24" FontWeight="Bold"/>
-                <Button HorizontalAlignment="Left" Margin="3,5,0,0" VerticalAlignment="Top" Width="30" Height="100" Click="PrevButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="White" Opacity="0" ToolTip="이전곡"/>
-                <Button HorizontalAlignment="Left" Margin="33,5,0,0" VerticalAlignment="Top" Width="40" Height="100" Click="PlayOrPauseButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="White" Opacity="0" ToolTip="재생/일시정지"/>
-                <Button HorizontalAlignment="Left" Margin="73,5,0,0" VerticalAlignment="Top" Width="30" Height="100" Click="NextButton_Click" BorderBrush="{x:Null}" Foreground="{x:Null}" Background="White" Opacity="0" ToolTip="다음곡"/>
--->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="*" />
