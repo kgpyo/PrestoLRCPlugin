@@ -18,6 +18,7 @@ namespace Presto.SWCamp.Lyrics
         private const string lengthPattern = @"^\[length:.*\]$";
         private const string byPattern = @"^\[by:.*\]$";
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
+        private AlsongLRCManager alsongLRCManager = new AlsongLRCManager();
         private Lyrics lyrics;
         private List<double> timeList = null; // 이진탐색을 위해 사용하는 리스트
         public string CurrentMusic { get; set; } = null;        
@@ -27,22 +28,33 @@ namespace Presto.SWCamp.Lyrics
         {
             lyrics = null;//GCC
             lyrics = new Lyrics();
+            string artist = PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name;
+            string album = PrestoSDK.PrestoService.Player.CurrentMusic.Album.Name;
+            string bitrate = PrestoSDK.PrestoService.Player.CurrentMusic.Bitrate.ToString();
+            string title = PrestoSDK.PrestoService.Player.CurrentMusic.Title.ToString();
             try
             {
                 CurrentMusic = PrestoSDK.PrestoService.Player.CurrentMusic.Path;
                 string lyricsFileName = Path.GetFileNameWithoutExtension(CurrentMusic) + ".lrc";
                 string parentPath = Path.GetDirectoryName(CurrentMusic);
-                string[] lines = File.ReadAllLines(Path.Combine(parentPath, lyricsFileName), Encoding.Default);
-                this.LyricsParsing(lines);
+                string path = Path.Combine(parentPath, lyricsFileName);
+                FileInfo file = new FileInfo(path);
+                if(file.Exists == true)
+                {
+                    string[] lines = File.ReadAllLines(path, Encoding.Default);
+                    this.LyricsParsing(lines);
+                }
+                else
+                {
+                    string lrcData = alsongLRCManager.GetLRCData(title, artist);
+                    string[] lines = lrcData.Split('\n');
+                    this.LyricsParsing(lines);
+                }
             }
             catch
             {
-                string artist = PrestoSDK.PrestoService.Player.CurrentMusic.Artist.Name;
-                string album = PrestoSDK.PrestoService.Player.CurrentMusic.Album.Name;
-                string bitrate = PrestoSDK.PrestoService.Player.CurrentMusic.Bitrate.ToString();
-                if (artist == null) artist = "알수없는 음악가";
-                if (album == null) album = "알 수 없는 앨범";
-                if (bitrate == "0") bitrate = "알수없음";
+                if (artist == null) artist = lyrics.Artist;
+                if (album == null) album = lyrics.Album;
                 lyrics.Lines.Add(0,artist + "/" + album + "/" + bitrate + "kbps"
                     + "\n가사를 불러올 수 없습니다.");
             }

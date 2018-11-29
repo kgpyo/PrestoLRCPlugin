@@ -10,16 +10,16 @@ using System.Xml;
 namespace Presto.SWCamp.Lyrics
 {
     class AlsongLRCManager
-    {//sring -> StringBuilder 변경
-        private StringBuilder data;
+    {
+        //sring -> StringBuilder 변경
+        private StringBuilder data = new StringBuilder();
         
-        AlsongLRCManager()
+        public AlsongLRCManager()
         {
-            data = new StringBuilder();
             data.Append("<?xml version=\"1.0\" encoding=\"UTF-8\"?>");
             data.Append("<SOAP-ENV:Envelope ");
-            data.Append("xlns:SOAP-ENV =\"http://www.w3.org/2003/05/soap-envelope\" ");
-            data.Append("xmlns:SOAP-ENC=\"http://wwww.3org/2003/05/soap-encoding\" ");
+            data.Append("xmlns:SOAP-ENV =\"http://www.w3.org/2003/05/soap-envelope\" ");
+            data.Append("xmlns:SOAP-ENC=\"http://www.w3.org/2003/05/soap-encoding\" ");
             data.Append("xmlns:xsi=\"http://www.w3.org/2001/XMLSchema-instance\" ");
             data.Append("xmlns:xsd=\"http://www.w3.org/2001/XMLSchema\" ");
             data.Append("xmlns:ns2=\"ALSongWebServer/Service1Soap\" ");
@@ -28,14 +28,17 @@ namespace Presto.SWCamp.Lyrics
             data.Append("<SOAP-ENV:Body>");
             data.Append("<ns1:GetResembleLyric2>");
             data.Append("<ns1:stQuery>");
-            data.Append("<ns1:strTitle>lucky strike</ns1:strTitle>");
-            data.Append("<ns1:strArtistName>maroon5</ns1:strArtistName>");
+            data.Append("<ns1:strTitle>{0}</ns1:strTitle>");
+            data.Append("<ns1:strArtistName>{1}</ns1:strArtistName>");
             data.Append("<ns1:nCurPage>0</ns1:nCurPage>");
             data.Append("</ns1:stQuery>");
             data.Append("</ns1:GetResembleLyric2>");
             data.Append("</SOAP-ENV:Body>");
             data.Append("</SOAP-ENV:Envelope>");
-            Console.WriteLine(RequestLRCToAlsong("비와당신", "럼블피쉬"));
+        }
+        public string GetLRCData(string title, string artist)
+        {
+            return HtmlParsingToLRC(RequestLRCToAlsong(title, artist));
         }
         public string RequestLRCToAlsong(string title, string artist)
         {
