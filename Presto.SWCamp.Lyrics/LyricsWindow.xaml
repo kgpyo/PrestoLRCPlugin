@@ -6,8 +6,8 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ps="clr-namespace:Presto.SDK;assembly=Presto.SDK"
     Title="미니 플레이어"
-    Width="300"
-    Height="80"
+    Width="200"
+    Height="60"
     DataContext="{x:Static ps:PrestoSDK.PrestoService}"
     MouseLeftButtonDown="Window_MouseDown"
     WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" AllowsTransparency="True" Background="{x:Null}">
@@ -15,18 +15,18 @@
              CornerRadius="10" Background="#FFE1DCD9">
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="80"/>
+                <ColumnDefinition Width="60"/>
                 <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Rectangle Grid.Column="0" Height="75" Width="75" RadiusX="10" RadiusY="10">
+            <Rectangle Grid.Column="0" Height="60" Width="60" RadiusX="10" RadiusY="10">
                 <Rectangle.Fill>
                     <ImageBrush ImageSource="noAlbumArt.JPG" Opacity="0.9"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle Grid.Column="0" Height="80" Width="80" RadiusX="10" RadiusY="10">
+            <Rectangle Grid.Column="0" Height="60" Width="60" RadiusX="10" RadiusY="10">
                 <Rectangle.Fill>
                     <ImageBrush  ImageSource="{Binding Player.CurrentMusic.Album.Picture}"/>
                 </Rectangle.Fill>
@@ -34,25 +34,30 @@
 
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="5" />
-                    <RowDefinition Height="20" />
+                    <RowDefinition Height="1" />
+                    <RowDefinition Height="15" />
                     <RowDefinition Height="15" />
                     <RowDefinition Height="*" />
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0">
 
                 </Grid>
-                <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Player.CurrentMusic.Title}" FontWeight="Bold" TextAlignment="Center" TextOptions.TextFormattingMode="Display" FontSize="15" Foreground="#FF32435F"/>
-                <TextBlock Grid.Row="2" TextWrapping="Wrap" Text="{Binding Player.CurrentMusic.Artist.Name}" Foreground="#FF8F8681" TextAlignment="Center" FontSize="12"  TextOptions.TextFormattingMode="Display" FontWeight="Bold"/>
+                <TextBlock Grid.Row="1" Text="{Binding Player.CurrentMusic.Title}" FontWeight="Bold" TextAlignment="Center" TextOptions.TextFormattingMode="Display" FontSize="12" Foreground="#FF32435F" Name="MyWipedText">
+                    
+                    <TextBlock.Triggers>
+                       
+                    </TextBlock.Triggers>
+                </TextBlock>
+                <TextBlock Grid.Row="2" Text="{Binding Player.CurrentMusic.Artist.Name}" Foreground="#FF8F8681" TextAlignment="Center" FontSize="10"  TextOptions.TextFormattingMode="Display" FontWeight="Bold"/>
                 <Grid Grid.Row="3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
-                    <Button Grid.Column="0" Content="◀◀" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="20"/>
-                    <Button Grid.Column="1" Content="&#11035; / &#10074;&#10074;" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="20"/>
-                    <Button Grid.Column="2" Content="▶▶" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="20" />
+                    <Button Grid.Column="0" Content="◀◀" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="PrevButton_Click" Margin="0,-2,0,2"/>
+                    <Button Grid.Column="1" Content="&#11035; / &#10074;&#10074;" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="PlayOrPauseButton_Click" Margin="0,-2,0,2"/>
+                    <Button Grid.Column="2" Content="▶▶" Width="auto" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="#FFA67F78" TextOptions.TextFormattingMode="Display" FontSize="12" Click="NextButton_Click" Margin="0,-2,0,2"/>
 
                 </Grid>
             </Grid>

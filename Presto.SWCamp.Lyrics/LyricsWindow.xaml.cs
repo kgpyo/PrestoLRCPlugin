@@ -67,7 +67,7 @@ namespace Presto.SWCamp.Lyrics
             if (e.RightButton != MouseButtonState.Pressed) DragMove();
         }
 
-        /*
+        
         private void PrevButton_Click(object sender, RoutedEventArgs e)
         {
             PrestoSDK.PrestoService.Player.PlayPrevious();
@@ -78,16 +78,14 @@ namespace Presto.SWCamp.Lyrics
             switch (PrestoSDK.PrestoService.Player.PlaybackState)
             {
                 case Common.PlaybackState.Playing:
-                    playStatus.Content = "||";
+                  
                     PrestoSDK.PrestoService.Player.Pause();
                     break;
                 case Common.PlaybackState.Paused:
-                    playStatus.Content = "";
                     PrestoSDK.PrestoService.Player.Resume();
                     break;
                 case Common.PlaybackState.Stopped:
-                    playStatus.Content = "";
-                    PrestoSDK.PrestoService.Player.Play();
+                     PrestoSDK.PrestoService.Player.Play();
                     break;
             }
         }
@@ -118,5 +116,6 @@ namespace Presto.SWCamp.Lyrics
             }
         }
         */
+
     }
 }
