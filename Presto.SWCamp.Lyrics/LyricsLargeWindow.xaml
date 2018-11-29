@@ -4,9 +4,93 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Presto.SWCamp.Lyrics"
+        xmlns:ps="clr-namespace:Presto.SDK;assembly=Presto.SDK"
+        DataContext="{x:Static ps:PrestoSDK.PrestoService}"
         mc:Ignorable="d"
-        Title="LyricsLargeWindow" Height="450" Width="800">
-    <Grid>
-        
-    </Grid>
+        MouseLeftButtonDown="Window_MouseDown"
+        Title="LyricsLargeWindow" Height="300" Width="300" WindowStyle="None"
+        ResizeMode="NoResize" ShowInTaskbar="False" AllowsTransparency="True" Background="{x:Null}" Foreground="White">
+    <Border  BorderThickness="2"
+             CornerRadius="15">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="20" />
+                <RowDefinition Height="35" />
+                <RowDefinition Height="*" />
+                <RowDefinition Height="20" />
+                <RowDefinition Height="10" />
+            </Grid.RowDefinitions>
+
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="15">
+                <Rectangle.Fill>
+                    <ImageBrush ImageSource="noAlbumArt.JPG" Opacity="0.5" Stretch="UniformToFill"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" Height="300" RadiusX="15" RadiusY="15" Margin="0,0,0,-4">
+                <Rectangle.Fill>
+                    <ImageBrush  x:Name="albumArtImage" ImageSource="{Binding Player.CurrentMusic.Album.Picture}" Opacity="0.8" Stretch="UniformToFill"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="20" Opacity="0.5">
+                <Rectangle.Fill>
+                    <SolidColorBrush Color="Black" Opacity="0.5"/>
+                </Rectangle.Fill>
+            </Rectangle>
+            <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Player.CurrentMusic.Title}" FontWeight="Bold" Height="auto" Width="auto" TextAlignment="Center" />
+            <Grid Grid.Row="4">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                </Grid.ColumnDefinitions>
+                <ProgressBar Grid.Column="1" Width="auto" Height="3" Maximum="{Binding Player.Length}" Value="{Binding Player.Position}" BorderBrush="{x:Null}">
+                    <ProgressBar.Foreground>
+                        <SolidColorBrush Color="White" Opacity="0.5"/>
+                    </ProgressBar.Foreground>
+                    <ProgressBar.Background>
+                        <SolidColorBrush Color="Black" Opacity="0.5"/>
+                    </ProgressBar.Background>
+                </ProgressBar>
+            </Grid>
+            <Grid Grid.Row="3" Opacity="0.5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0" Content="▲" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="1" Content="▼" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="2" Content="◀◀" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="3" Content="▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="4" Content="▶▶" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="5" Content="L" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+                <Button Grid.Column="6" Content="R" Background="{x:Null}" BorderBrush="{x:Null}" Foreground="White" TextOptions.TextFormattingMode="Display" />
+            </Grid>
+            <Grid Grid.Row="0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="8" />
+                    <ColumnDefinition Width="30" />
+                    <ColumnDefinition Width="50" />
+                    <ColumnDefinition Width="*" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="20" />
+                    <ColumnDefinition Width="8" />
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="1" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" Text="offset" FontSize="10"/>
+                <TextBlock Grid.Column="2" TextWrapping="Wrap" Height="auto" Width="auto" TextAlignment="Left" FontSize="10" />
+                <Button Grid.Column="4" BorderBrush="{x:Null}" Background="{x:Null}" Content="-" Foreground="White" />
+                <Button Grid.Column="5" BorderBrush="{x:Null}" Background="{x:Null}" Content="+" Foreground="White" />
+                <Button Grid.Column="6" BorderBrush="{x:Null}" Background="{x:Null}" Content="O" Foreground="White" />
+                <Button Grid.Column="7" BorderBrush="{x:Null}" Background="{x:Null}" Content="&#11035;" Foreground="White" />
+                <Button Grid.Column="8" BorderBrush="{x:Null}" Background="{x:Null}" Content="X" Foreground="White" />
+            </Grid>
+        </Grid>
+    </Border>
 </Window>

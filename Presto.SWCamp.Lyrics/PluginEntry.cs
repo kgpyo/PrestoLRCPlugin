@@ -10,16 +10,20 @@ namespace Presto.SWCamp.Lyrics
     public class PluginEntry : PrestoPlugin
     {
         private LyricsWindow _lyrics;
+        private LyricsLargeWindow _lyricsLarge;
 
         public override void OnLoad()
         {
             _lyrics = new LyricsWindow();
+            _lyricsLarge = new LyricsLargeWindow();
             _lyrics.Show();
+            _lyricsLarge.Show();
         }
 
         public override void OnUnload()
         {
             _lyrics.Close();
+            _lyricsLarge.Close();
         }
     }
 }

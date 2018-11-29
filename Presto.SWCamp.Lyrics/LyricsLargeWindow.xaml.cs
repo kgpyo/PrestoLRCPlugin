@@ -22,6 +22,13 @@ namespace Presto.SWCamp.Lyrics
         public LyricsLargeWindow()
         {
             InitializeComponent();
+            this.Left = SystemParameters.WorkArea.Width - this.Width;
+            this.Top = SystemParameters.WorkArea.Height - this.Height;
+        }
+
+        private void Window_MouseDown(object sender, MouseButtonEventArgs e)
+        {
+            if (e.RightButton != MouseButtonState.Pressed) DragMove();
         }
     }
 }
