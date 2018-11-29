@@ -21,23 +21,23 @@
                 <RowDefinition Height="10" />
             </Grid.RowDefinitions>
 
-            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="15">
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="15" Opacity="0.5">
                 <Rectangle.Fill>
-                    <ImageBrush ImageSource="noAlbumArt.JPG" Opacity="0.5" Stretch="UniformToFill"/>
+                    <ImageBrush ImageSource="noAlbumArt.JPG"  Stretch="UniformToFill"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle Grid.Column="0" Grid.RowSpan="7" Height="300" RadiusX="15" RadiusY="15" Margin="0,0,0,-4">
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" Height="300" RadiusX="15" RadiusY="15" Margin="0,0,0,-4" Opacity="0.7">
                 <Rectangle.Fill>
-                    <ImageBrush  x:Name="albumArtImage" ImageSource="{Binding Player.CurrentMusic.Album.Picture}" Opacity="0.8" Stretch="UniformToFill"/>
+                    <ImageBrush  x:Name="albumArtImage" ImageSource="{Binding Player.CurrentMusic.Album.Picture}" Stretch="UniformToFill"/>
                 </Rectangle.Fill>
             </Rectangle>
-            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="20" Opacity="0.5">
+            <Rectangle Grid.Column="0" Grid.RowSpan="7" RadiusX="15" RadiusY="20" Opacity="0.4">
                 <Rectangle.Fill>
-                    <SolidColorBrush Color="Black" Opacity="0.5"/>
+                    <SolidColorBrush Color="Black"/>
                 </Rectangle.Fill>
             </Rectangle>
             <TextBlock Grid.Row="1" TextWrapping="Wrap" Text="{Binding Player.CurrentMusic.Title}" FontWeight="Bold" Height="auto" Width="auto" TextAlignment="Center" />
-            <ListBox Grid.Row="2" x:Name="lyricsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="LyricsList_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}">
+            <ListBox Grid.Row="2" x:Name="lyricsList" ScrollViewer.HorizontalScrollBarVisibility="Disabled" SelectionChanged="LyricsList_SelectionChanged" Background="{x:Null}" BorderBrush="{x:Null}" ScrollViewer.VerticalScrollBarVisibility="Hidden">
                     <ListBox.Resources>
                         <Style TargetType="{x:Type ListBoxItem}">
                             <Setter Property="Template">

@@ -128,8 +128,14 @@ namespace Presto.SWCamp.Lyrics
             // 유효한 범위가 아니라면 실행하지 않음
             if (!(selectedIndex >=0 && selectedIndex<lyricsList.Items.Count))
                 return;
+
             //자동 스크롤
-            lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex]);
+            //자동으로 가운데 정렬이 안되기 때무에 임시로 한칸 당김
+            //일본어 가사인 경우 두칸 내려가면 가사가 안보이기때문에 한칸만 위로
+            if(selectedIndex < lyricsList.Items.Count - 2)
+                lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex + 1]);
+            else
+                lyricsList.ScrollIntoView(lyricsList.Items[selectedIndex]);
 
 
             if (isAutoLyricsIndexChange == true)

@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Presto.SWCamp.Lyrics
@@ -11,13 +12,13 @@ namespace Presto.SWCamp.Lyrics
     class LyricsManager
     {
         private enum LRCFormat { Artist, Album, Title, Author, PlayeTime, LRCMaker, Lyrics, None };
-        private const string artistPattern = @"^\[ar:.*\]$";
-        private const string albumPattern = @"^\[al:.*\]$";
-        private const string titlePattern = @"^\[ti:.*\]$";
-        private const string authorPattern = @"^\[au:.*\]$";
-        private const string lengthPattern = @"^\[length:.*\]$";
-        private const string byPattern = @"^\[by:.*\]$";
-        private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
+        private readonly Regex artistPattern = new Regex(@"^\[ar:(.+)\]$");
+        private readonly Regex albumPattern = new Regex(@"^\[al:(.+)\]$");
+        private readonly Regex titlePattern = new Regex(@"^\[ti:(.+)\]$");
+        private readonly Regex authorPattern = new Regex(@"^\[au:(.+)\]$");
+        private readonly Regex lengthPattern = new Regex(@"^\[length:(.+)\]$");
+        private readonly Regex byPattern = new Regex(@"^\[by:(.+)\]$");
+        private readonly Regex syncPattern = new Regex(@"\[([0-9]+):([0-9]+)\.([0-9]+)\](.*)");
         private AlsongLRCManager alsongLRCManager = new AlsongLRCManager();
         private Lyrics lyrics;
         private List<double> timeList = null; // 이진탐색을 위해 사용하는 리스트
@@ -83,23 +84,21 @@ namespace Presto.SWCamp.Lyrics
                 LRCFormat type = this.FindMatcingType(data.ToLower());
                 switch (type)
                 {
-                    case LRCFormat.Title: lyrics.Title = data; break;
-                    case LRCFormat.Artist: lyrics.Artist = data; break;
-                    case LRCFormat.Album: lyrics.Album = data; break;
-                    case LRCFormat.Author: lyrics.Author = data; break;
-                    case LRCFormat.LRCMaker: lyrics.By = data; break;
-                    case LRCFormat.PlayeTime: /*lyrics.Length = data; */ break;
+                    case LRCFormat.Title: lyrics.Title = titlePattern.Match(data).Groups[1].ToString().Trim(); break;
+                    case LRCFormat.Artist: lyrics.Artist = artistPattern.Match(data).Groups[1].ToString().Trim(); break;
+                    case LRCFormat.Album: lyrics.Album = albumPattern.Match(data).Groups[1].ToString().Trim(); break;
+                    case LRCFormat.Author: lyrics.Author = authorPattern.Match(data).Groups[1].ToString().Trim(); break;
+                    case LRCFormat.LRCMaker: lyrics.By = byPattern.Match(data).Groups[1].ToString().Trim(); break;
+                    case LRCFormat.PlayeTime: lyrics.Length = int.Parse(lengthPattern.Match(data).Groups[1].ToString().Trim()); break;
                     case LRCFormat.Lyrics:
-                        int parseIdx = data.IndexOf("]");
-                        string timeData = data.Substring(1, parseIdx - 1);
-                        string lyricsData = data.Substring(parseIdx + 1);
-                        
+                        GroupCollection matchingData = syncPattern.Match(data).Groups;
+                        string lyricsData = matchingData[4].ToString().Trim();
 
                         //시간영역 m,s,f
                         string[] timeFormat = {
-                            timeData.Split(':')[0],
-                            timeData.Split(':')[1].Split('.')[0],
-                            timeData.Split(':')[1].Split('.')[1]
+                            matchingData[1].ToString().Trim(),
+                            matchingData[2].ToString().Trim(),
+                            matchingData[3].ToString().Trim()
                         };
                         time = int.Parse(timeFormat[0]) * 1000 * 60 + int.Parse(timeFormat[1]) * 1000 + int.Parse(timeFormat[2]);
 
@@ -131,24 +130,25 @@ namespace Presto.SWCamp.Lyrics
                 infoData += "\n" + lyrics.Lines[0];
                 lyrics.Lines.Remove(0);
             }
+            lyrics.Lines.Add(0, infoData);
         }
 
         //해당 데이터가 어떤 데이터인지 판별
         private LRCFormat FindMatcingType(string inputLine)
         {
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, artistPattern))
+            if (artistPattern.IsMatch(inputLine) == true)
                 return LRCFormat.Artist;
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, albumPattern))
+            if (albumPattern.IsMatch(inputLine) == true)
                 return LRCFormat.Album;
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, titlePattern))
+            if (titlePattern.IsMatch(inputLine) == true)
                 return LRCFormat.Title;
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, authorPattern))
+            if (authorPattern.IsMatch(inputLine) == true)
                 return LRCFormat.Author;
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, lengthPattern))
+            if (lengthPattern.IsMatch(inputLine)==true)
                 return LRCFormat.PlayeTime;
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, byPattern))
+            if (byPattern.IsMatch(inputLine) == true)
                 return LRCFormat.LRCMaker;
-            if (System.Text.RegularExpressions.Regex.IsMatch(inputLine, syncPattern))
+            if (syncPattern.IsMatch(inputLine) == true)
                 return LRCFormat.Lyrics;
             
             return LRCFormat.None;
@@ -178,7 +178,12 @@ namespace Presto.SWCamp.Lyrics
 
         public double GetSelectPosition(int index)
         {
-            return this.timeList[index];
+            double position = this.timeList[index] - this.lyrics.Offset;
+            if (position < 0)
+                position = 0;
+            if (position > PrestoSDK.PrestoService.Player.Length)
+                position = PrestoSDK.PrestoService.Player.Length - 1;
+            return position;
         }
 
         public SortedDictionary<double, string> GetLyricsData()
