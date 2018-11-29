@@ -19,9 +19,8 @@ namespace Presto.SWCamp.Lyrics
         private const string byPattern = @"^\[by:.*\]$";
         private const string syncPattern = @"\[[0-9]*:[0-9]*\.[0-9]*\].*";
         private Lyrics lyrics;
-        public string CurrentMusic { get; set; } = null;
-        List<double> timestore;
-        Dictionary<double, string> lyricsMap;
+        private List<double> timeList = null; // 이진탐색을 위해 사용하는 리스트
+        public string CurrentMusic { get; set; } = null;        
         
             
         public void StreamChanged()
@@ -44,8 +43,8 @@ namespace Presto.SWCamp.Lyrics
                 if (artist == null) artist = "알수없는 음악가";
                 if (album == null) album = "알 수 없는 앨범";
                 if (bitrate == "0") bitrate = "알수없음";
-                lyrics.Lines.Add(new KeyValuePair<double, string>(0,artist + "/" + album + "/" + bitrate + "kbps"
-                    + "\n가사를 불러올 수 없습니다."));
+                lyrics.Lines.Add(0,artist + "/" + album + "/" + bitrate + "kbps"
+                    + "\n가사를 불러올 수 없습니다.");
             }
         }
 
@@ -53,8 +52,6 @@ namespace Presto.SWCamp.Lyrics
         private void LyricsParsing(string[] lines)
         {
             double time = 0;
-            lyricsMap = new Dictionary<double, string>();
-            timestore = new List<double>();
             foreach (string data in lines)
             {
                 LRCFormat type = this.FindMatcingType(data.ToLower());
@@ -79,42 +76,27 @@ namespace Presto.SWCamp.Lyrics
                             timeData.Split(':')[1].Split('.')[1]
                         };
                         time = int.Parse(timeFormat[0]) * 1000 * 60 + int.Parse(timeFormat[1]) * 1000 + int.Parse(timeFormat[2]);
-                        lyrics.Lines.Add(new KeyValuePair<double, string>(time, lyricsData));
-                        timestore.Add(time);
-                        lyricsMap.Add(time, lyricsData);
 
-
+                        if(lyrics.Lines.ContainsKey(time) == true)
+                        {
+                            lyricsData = lyrics.Lines[time] + "\n" + lyricsData;
+                            lyrics.Lines.Remove(time);
+                        }
+                        lyrics.Lines.Add(time, lyricsData);
+                        
                         break;
                     //텍스트만 존재할경우 이전가사와 합침
                     case LRCFormat.None:
                         if (lyrics.Lines.Count <= 0 || data == "") break;
-                        string newData = lyrics.Lines.Last().Value + data;
-                        time = lyrics.Lines.Last().Key;
-                        lyrics.Lines.RemoveAt(lyrics.Lines.Count - 1);
-                        lyrics.Lines.Add(new KeyValuePair<double, string>(time, newData));
-                        timestore.Add(time);
-                        lyricsMap.Add(time, newData);
+                        if (lyrics.Lines.ContainsKey(time) != true) break;
+                        string newData = lyrics.Lines[time] + "\n" + data;
+                        lyrics.Lines.Remove(time);
+                        lyrics.Lines.Add(time, newData);
                         break;
                 }
             }
-            //lyrics.Lines.Sort((x, y) => x.Key.CompareTo(y.Key));
-            lyrics.Lines.OrderBy(x => x.Key); //안정정렬
-
-            //중복된 시간을 가진 가사가 여러개 있을경우 하나로 합침
-            for (int i = 1; i < lyrics.Lines.Count; i++)
-            {
-                KeyValuePair<double, string> cur = lyrics.Lines[i];
-                KeyValuePair<double, string> prev = lyrics.Lines[i - 1];
-                if (cur.Key == prev.Key)
-                {
-                    lyrics.Lines[i - 1] = new KeyValuePair<double, string>(cur.Key, prev.Value + "\r\n" + cur.Value);
-                    timestore[i - 1] = lyrics.Lines[i].Key;
-                    lyricsMap.Add(lyrics.Lines[i].Key, lyrics.Lines[i - 1].Value + "\r\n" + lyrics.Lines[i].Value);
-                    timestore.Remove(i);
-                    lyrics.Lines.RemoveAt(i);
-                    i--;
-                }
-            }
+            timeList = null;
+            timeList = lyrics.Lines.Keys.ToList<double>();
         }
 
         //해당 데이터가 어떤 데이터인지 판별
@@ -137,43 +119,31 @@ namespace Presto.SWCamp.Lyrics
             
             return LRCFormat.None;
         }
+        public int GetCurrentLyricsIndex(double position)
+        {
+            int closeLyrics = -1;
 
+            closeLyrics = timeList.BinarySearch(position);
+
+            if (closeLyrics >= 0) return -1;
+            return Math.Max(0, ~closeLyrics - 1);
+        }
         public string GetCurrentLyric(double position)
         {
             string preparing = "가사 준비중입니다.";
             
             if (lyrics == null || lyrics.Lines.Count <= 0 || position < 0)
                 return preparing;
-            int lyricsLength = lyrics.Lines.Count;
-            int left = 0, right = lyricsLength-1, mid = 0, closeLyrics = -1;
-            
-            closeLyrics = timestore.BinarySearch(position);
-            
-            /*
-            while (left<=right)
-            {
-                mid = (left + right);
-                if(lyrics.Lines[mid].Key <= position)
-                {
-                    closeLyrics = mid;
-                    left = mid + 1;
-                }
-                else
-                {
-                    right = mid - 1;
-                }
-            }
-            */
-            //근접한 위치를 찾을 수 없을경우 가사파일 정보를 출력
-            if (closeLyrics>=0)
+            int lyricsIndex = this.GetCurrentLyricsIndex(position);
+            if (lyricsIndex < 0)
             {
                 string infoData = "곡명: " + lyrics.Title + "(" + lyrics.Album+ ")\n" +
                     "작사가: " + lyrics.Author + "\n" +
                     "가사 만든이: " + lyrics.By;
                 return infoData;
             }
-            else
-            return lyricsMap[timestore[Math.Max(0, ~closeLyrics - 1)]];
+
+            return lyrics.Lines[timeList[lyricsIndex]];
         }
     }
 }
