@@ -87,7 +87,7 @@
                     <ListBox.ItemTemplate>
                         <DataTemplate>
                             <StackPanel>
-                                <TextBlock Text="{Binding Value}" TextWrapping="Wrap" Foreground="White"/>
+                                <TextBlock Text="{Binding Value}" TextWrapping="Wrap" Foreground="White" TextOptions.TextFormattingMode="Display"/>
                             </StackPanel>
                         </DataTemplate>
                     </ListBox.ItemTemplate>
