@@ -5,6 +5,7 @@ using System.Linq;
 using System.Net;
 using System.Text;
 using System.Threading.Tasks;
+using System.Xml;
 
 namespace Presto.SWCamp.Lyrics
 {
@@ -62,10 +63,22 @@ namespace Presto.SWCamp.Lyrics
 
         }
 
-        public string HtmlParsingToLRC(ref string data)
+        public string HtmlParsingToLRC(string data)
         {
+            XmlDocument xml = new XmlDocument();
+            xml.LoadXml(data);
+            XmlNodeList xmlList = xml.GetElementsByTagName("ST_GET_RESEMBLELYRIC2_RETURN");
 
-            return string.Empty;
+            string x = xmlList[0]["strLyric"].InnerText; // xmlList상태로 변경하려니 인터넷 자료는 커녕 MS사에도 없길래 
+            x = x.Replace("<br>", "\n");          // string 을만들어서 때려박아서 수정
+
+            StringBuilder resultData = new StringBuilder();
+            resultData.AppendFormat("[ar:{0}]\n", xmlList[0]["strArtistName"].InnerText);
+            resultData.AppendFormat("[al:{0}]\n", xmlList[0]["strAlbumName"].InnerText);
+            resultData.AppendFormat("[by:{0}]\n", xmlList[0]["strRegisterFirstName"].InnerText);
+            resultData.AppendFormat("[ti:{0}]\n", xmlList[0]["strRegisterName"].InnerText);
+            resultData.Append(x);
+            return resultData.ToString();
         }
     }
 }
