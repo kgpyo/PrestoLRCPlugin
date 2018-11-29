@@ -9,7 +9,8 @@ namespace Presto.SWCamp.Lyrics
 {
     class Lyrics
     {
-        public List<KeyValuePair<double, string>> Lines = new List<KeyValuePair<double, string>>();    //가사 데이터
+        //list -> sortedDictonary 변경
+        public SortedDictionary<double, string> Lines = new SortedDictionary<double, string>();    //가사 데이터
         public int Sync { get; set; }                       //싱크 데이터
         public string Title { get; set; } = "정보없음";     //제목
         public string Artist { get; set; } = "정보없음";    //가수
