@@ -68,16 +68,16 @@ namespace Presto.SWCamp.Lyrics
                     if (!(path == null || path == string.Empty))
                     {
                         check = true;
-                        albumArtImage.Source = new BitmapImage(new Uri(path));
+                        albumArtImage.ImageSource = new BitmapImage(new Uri(path));
                     }
                 }
             } else
             {
                 check = true;
-                albumArtImage.Source = new BitmapImage(new Uri(PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture));
+                albumArtImage.ImageSource = new BitmapImage(new Uri(PrestoSDK.PrestoService.Player.CurrentMusic.Album.Picture));
             }
             if (!check)
-                albumArtImage.Source = null;
+                albumArtImage.ImageSource = null;
         }
         
         private void Timer_Tick(object sender, EventArgs e)
@@ -117,6 +117,11 @@ namespace Presto.SWCamp.Lyrics
         private void NextButton_Click(object sender, RoutedEventArgs e)
         {
             PrestoSDK.PrestoService.Player.PlayNext();
+        }
+
+        private void Window_MouseDoubleClick(object sender, MouseButtonEventArgs e)
+        {
+            this.Hide();
         }
 
         /* 우상단 버튼 관리 

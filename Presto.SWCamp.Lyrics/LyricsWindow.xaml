@@ -10,6 +10,7 @@
     Height="60"
     DataContext="{x:Static ps:PrestoSDK.PrestoService}"
     MouseLeftButtonDown="Window_MouseDown"
+    MouseDoubleClick="Window_MouseDoubleClick"
     WindowStyle="None" ResizeMode="NoResize" ShowInTaskbar="False" AllowsTransparency="True" Background="{x:Null}">
     <Border  BorderThickness="1.5"
              CornerRadius="10" Background="#FFE1DCD9">
@@ -44,7 +45,7 @@
             </Rectangle>
             <Rectangle Grid.Column="0" Height="60" Width="60" RadiusX="10" RadiusY="10">
                 <Rectangle.Fill>
-                    <ImageBrush  ImageSource="{Binding Player.CurrentMusic.Album.Picture}"/>
+                    <ImageBrush  x:Name="albumArtImage" ImageSource="{Binding Player.CurrentMusic.Album.Picture}"/>
                 </Rectangle.Fill>
             </Rectangle>
 
