@@ -24,10 +24,11 @@ namespace Presto.SWCamp.Lyrics
         LyricsManager lyricsManager;
         public bool IsThisWindowShow { get; set;  } = false;
         private bool isAutoLyricsIndexChange = false;
-
-        public LyricsLargeWindow()
+        public Window ParentWindow { get; set; } = null;
+        public LyricsLargeWindow(Window parent)
         {
             InitializeComponent();
+            this.ParentWindow = parent;
             PrestoSDK.PrestoService.Player.StreamChanged += Player_StreamChanged;
             this.Left = SystemParameters.WorkArea.Width - this.Width;
             this.Top = SystemParameters.WorkArea.Height - this.Height;
@@ -216,6 +217,8 @@ namespace Presto.SWCamp.Lyrics
         {
             IsThisWindowShow = false;
             this.Hide();
+            ((LyricsWindow)this.ParentWindow).IsThisWindowShow = true;
+            ((LyricsWindow)this.ParentWindow).Show();
         }
 
         private void OffsetMinusButton_Click(object sender, RoutedEventArgs e)

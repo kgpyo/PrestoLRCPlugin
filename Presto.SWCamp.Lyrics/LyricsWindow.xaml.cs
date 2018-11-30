@@ -33,7 +33,7 @@ namespace Presto.SWCamp.Lyrics
             this.Top = SystemParameters.WorkArea.Height - this.Height;
             this.Topmost = true;
             albumartManager = new AlbumartManager();
-            _lyricsLarge = new LyricsLargeWindow();
+            _lyricsLarge = new LyricsLargeWindow(this);
 
         }
 
