@@ -48,8 +48,8 @@
     
 
 ### Downlaod
-**해당 Presto의 플러그인 폴더에 압축을 풀어주세요.**
-[다운로드](https://github.com/kgpyo/PrestoLRCPlugin/raw/master/Presto.Plugin.Lyrics.zip)
+**해당 Presto의 플러그인 폴더에 압축을 풀어주세요.**  
+[다운로드](https://github.com/kgpyo/PrestoLRCPlugin/wiki)
 
 ### 참여자
 * [고경표](https://github.com/kgpyo)
