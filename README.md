@@ -11,6 +11,7 @@
   * 다음과 같은 기능을 처리합니다.
     * [hhh:mm.ss] 등 [hh:mm.ss] 형태가 아닌 가사 처리를 지원합니다.
     * ![image](https://user-images.githubusercontent.com/42190339/49266427-88608280-f499-11e8-8b76-1cb8c69958c8.png)  
+      ![image](https://user-images.githubusercontent.com/42190339/49266318-feb0b500-f498-11e8-9115-21b1062935af.png) 
       위와 같이 싱크정보가 담겨있지 않는 정보를 처리합니다. (이전 가사와 같이 출력합니다.)
     * lrc 파일에 담겨있는 정보 출력 (가사 만든이, 작사가, 곡명)
     * UTF8, ansi, 유니코드 인코딩 지원
@@ -41,7 +42,6 @@
 더블 클릭시 가사 창이 출력됩니다.
 
 #### 큰 플레이어(가사 창)
-![image](https://user-images.githubusercontent.com/42190339/49266318-feb0b500-f498-11e8-9115-21b1062935af.png) 
 ![image](https://user-images.githubusercontent.com/42190339/49266945-8697be80-f49b-11e8-871d-d8c074d43b52.png)  
 
 ### Downlaod
