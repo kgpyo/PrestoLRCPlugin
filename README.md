@@ -1,7 +1,7 @@
 ## Presto LRC 플러그인
 * ackage 폴더를 반드시 포함해서 다운받아주세요.
-* 숨기기 버튼이나 플레이어 화면 전환 버튼을 누른 후 새로운 곡 재생 시 해당 플레이어가 실생됩니다. (버그 아닙니다.)
-* offset 기능이 동작하지 않는경우 streamChanged가 다시 발생하면 동작합니다.
+* **숨기기 버튼이나 플레이어 화면 전환 버튼을 누른 후 새로운 곡 재생 시 해당 플레이어가 실생됩니다. (버그 아닙니다.)**
+* **offset 기능이 동작하지 않는경우 streamChanged가 다시 발생하면 동작합니다.**
   
 ### 기능
 * 가사 출력
@@ -45,7 +45,8 @@
 ![image](https://user-images.githubusercontent.com/42190339/49266945-8697be80-f49b-11e8-871d-d8c074d43b52.png)  
 
 ### Downlaod
-
+**해당 Presto의 플러그인 폴더에 압축을 풀어주세요.**
+[다운로드](https://github.com/kgpyo/PrestoLRCPlugin/raw/master/Presto.Plugin.Lyrics.zip)
 
 ### 참여자
 * [고경표](https://github.com/kgpyo)
