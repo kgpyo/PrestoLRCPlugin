@@ -2,7 +2,8 @@
 * **Package 폴더를 반드시 포함해서 다운받아주세요.**
 * **숨기기 버튼을 누른 후 새로운 곡 재생 시 해당 플레이어가 실생됩니다. (버그 아닙니다.)**
 * **offset 기능이 동작하지 않는경우 streamChanged가 다시 발생하면 동작합니다.**
-  
+* **ListBox의 Foucs는 " https://blog.jsinh.in/change-background-color-of-selected-listboxitem-listbox-in-wpf/ " 의 코드를 이용하였습니다.**
+
 ### 기능
 * **모든 플레이어는 항상 위에 표시됩니다.**
 * 가사 출력
@@ -32,7 +33,7 @@
   * 앨범아트가 존재하지 않을경우 maniaDB API 를 통해 앨범아트가 존재할 경우 출력
     * ![image](https://user-images.githubusercontent.com/42190339/49267011-be9f0180-f49b-11e8-9c5d-e6125411d69a.png)
 * 플레이어 기본 기능
-  * 0.5 간격으로 볼륨 조절 (0~1)
+  * 0.05 간격으로 볼륨 조절 (0~1)
   * 이전곡, 다음곡, 재생, 일시정지, 셔플, 반복 설정 가능
   * 가사창 플레이어에서 현재 재생중인 구간 하단에 표시
 
