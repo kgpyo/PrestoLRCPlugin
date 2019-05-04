@@ -39,9 +39,6 @@ namespace Presto.SWCamp.Lyrics
 
         private void Player_StreamChanged(object sender, Common.StreamChangedEventArgs e)
         {
-            //GC 강제 실행
-            System.GC.Collect(2, GCCollectionMode.Forced);
-            System.GC.WaitForFullGCComplete();
 
             if (IsThisWindowShow == true || _lyricsLarge.IsThisWindowShow == false)
             {
